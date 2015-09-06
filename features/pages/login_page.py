@@ -3,6 +3,10 @@
 from base_page import Page
 
 class LoginPage(Page):
+    
+    """
+    Login form 
+    """
 
     url = '/sign_in'
 
