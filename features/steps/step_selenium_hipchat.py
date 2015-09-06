@@ -1,19 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-"""
-Based on ``behave tutorial``
-"""
-
 # @mark.steps
 # ----------------------------------------------------------------------------
 # STEPS:
 # ----------------------------------------------------------------------------
 from behave import given, when, then
-
-#
-# HipChat
-#
 
 @given('we are on HipChat home page')
 def step_impl(context):
