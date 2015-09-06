@@ -3,6 +3,9 @@
 from base_page import Page
 
 class AuthorizedPage(Page):
+    """
+    Start page for logged in user
+    """
 
     url = '/home'
 
