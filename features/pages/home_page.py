@@ -3,7 +3,11 @@
 from base_page import Page
 
 class HomePage(Page):
-
+    
+    """
+    Unauthorized user home page
+    """
+    
     url = '/'
 
     def link_login(self):
