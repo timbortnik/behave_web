@@ -1,6 +1,12 @@
 # Behave Web Selenium demo
 Python Behave/Selenium test examples
 
+BDD Feature: https://github.com/timbortnik/behave_web/blob/master/features/selenium_hipchat.feature
+
+Step Definitions: https://github.com/timbortnik/behave_web/blob/master/features/steps/step_selenium_hipchat.py
+
+Page objects: https://github.com/timbortnik/behave_web/tree/master/features/pages
+
 ## Prerequisites
 * Python 2.7, pip
 
