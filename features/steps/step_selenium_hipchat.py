@@ -6,19 +6,19 @@
 # ----------------------------------------------------------------------------
 from behave import given, when, then
 
-@given('we are on HipChat home page')
+@given('we are on Hipchat Login Page')
 def step_impl(context):
-    context.home_page.navigate()
-    assert context.home_page.at()
-
-@when('we proceed to the Login Page')
-def step_impl(context):
-    context.home_page.to_login_page()
+    context.login_page.navigate()
     assert context.login_page.at()
 
-@when('we login with valid credentials')
+@when('we enter login')
 def step_impl(context):
     context.login_page.enter_login(context.hipchat_login)
+    context.login_page.login()
+    pass
+
+@when('we enter password')
+def step_impl(context):
     context.login_page.enter_pass(context.hipchat_pass)
     context.login_page.login()
     pass
