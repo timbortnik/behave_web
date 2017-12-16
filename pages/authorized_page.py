@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
-from base_page import Page
+from .base_page import Page
+
 
 class AuthorizedPage(Page):
     """

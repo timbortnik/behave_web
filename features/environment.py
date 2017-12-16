@@ -16,15 +16,12 @@ before_tag(context, tag), after_tag(context, tag)
 
 """
 
-# -- SETUP: Use cfparse as default matcher
-# from behave import use_step_matcher
-# step_matcher("cfparse")
 
 from selenium import webdriver
-from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
-from environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
+from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
+
 
 def before_all(context):
 
@@ -34,7 +31,6 @@ def before_all(context):
     context.base_url = "https://www.hipchat.com"
     context.driver = webdriver.Chrome()
 
-    context.home_page = HomePage(context)
     context.login_page = LoginPage(context)
     context.authorized_page = AuthorizedPage(context)
 
