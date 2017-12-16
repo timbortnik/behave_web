@@ -1,4 +1,8 @@
 # Behave Web Selenium demo
+
+Travis CI status on Master:
+![CI](https://travis-ci.org/timbortnik/behave_web.svg?branch=master)
+
 Python Behave/Selenium test examples
 ![Output example](https://github.com/timbortnik/behave_web/blob/master/doc/behave_web.png)
 
