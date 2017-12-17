@@ -25,8 +25,6 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            sudo apt-get -qq update
-            sudo apt-get -qq upgrade -y google-chrome-stable
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
