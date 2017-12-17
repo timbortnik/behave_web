@@ -4,7 +4,7 @@ Travis CI status on Master:
 ![CI](https://travis-ci.org/timbortnik/behave_web.svg?branch=master)
 
 CircleCI status on Master:
-![CI](https://circleci.com/gh/:owner/:repo/tree/:branch.png?circle-token=:circle-token)
+![CI](https://circleci.com/gh/timbortnik/behave_web/tree/master.png)
 
 Python Behave/Selenium test examples
 ![Output example](https://github.com/timbortnik/behave_web/blob/master/doc/behave_web.png)
