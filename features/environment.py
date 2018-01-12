@@ -21,7 +21,14 @@ from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
+import os
+import datetime, time
+import selenium.webdriver.support.ui as ui
 
+
+def get_date_time():
+    dt_format = '%Y%m%d_%H%M%S'
+    return datetime.datetime.fromtimestamp(time.time()).strftime(dt_format)
 
 def before_all(context):
 
@@ -33,7 +40,19 @@ def before_all(context):
 
     context.login_page = LoginPage(context)
     context.authorized_page = AuthorizedPage(context)
+    context.wait = ui.WebDriverWait(context.driver, 10)
+
+
+def after_scenario(context, scenario):
+    print("scenario status" + scenario.status)
+    if scenario.status == "failed":
+        if not os.path.exists("failed_scenarios_screenshots"):
+            os.makedirs("failed_scenarios_screenshots")
+        os.chdir("failed_scenarios_screenshots")
+        context.driver.save_screenshot(scenario.name + get_date_time() + "_failed.png")
+    context.driver.quit()
 
 
 def after_all(context):
+    context.driver.quit()
     context.driver.close()
