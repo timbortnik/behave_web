@@ -50,9 +50,8 @@ def after_scenario(context, scenario):
             os.makedirs("failed_scenarios_screenshots")
         os.chdir("failed_scenarios_screenshots")
         context.driver.save_screenshot(scenario.name + get_date_time() + "_failed.png")
-    context.driver.quit()
+    context.driver.close()
 
 
 def after_all(context):
     context.driver.quit()
-    context.driver.close()
