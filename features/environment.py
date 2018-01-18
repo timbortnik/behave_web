@@ -21,7 +21,7 @@ from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
-import os, datetime, time
+import datetime, time
 
 
 def get_date_time():
@@ -30,7 +30,6 @@ def get_date_time():
 
 
 def before_all(context):
-
     context.hipchat_login = HIPCHAT_LOGIN
     context.hipchat_pass = HIPCHAT_PASS
 
@@ -42,13 +41,8 @@ def before_all(context):
 
 
 def after_scenario(context, scenario):
-    print("scenario status" + scenario.status)
     if scenario.status == "failed":
-        if not os.path.exists("failed_scenarios_screenshots"):
-            os.makedirs("failed_scenarios_screenshots")
-        os.chdir("failed_scenarios_screenshots")
-        context.driver.save_screenshot(scenario.name + get_date_time() + "_failed.png")
-    context.driver.close()
+        context.driver.save_screenshot('scenario_result/'+scenario.name + get_date_time() + "_failed.png")
 
 
 def after_all(context):
