@@ -1,0 +1,1 @@
+Screenshotes with failed browser test should be in this directrory
