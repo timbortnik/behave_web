@@ -1,1 +1,1 @@
-Screenshotes with failed browser test should be in this directrory
+Directory for screenshotes with failed test scenarios
