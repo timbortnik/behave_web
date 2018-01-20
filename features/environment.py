@@ -20,6 +20,7 @@ before_tag(context, tag), after_tag(context, tag)
 from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
+from pages.settings_page import SettingsPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
 import datetime, time
 
@@ -38,6 +39,7 @@ def before_all(context):
 
     context.login_page = LoginPage(context)
     context.authorized_page = AuthorizedPage(context)
+    context.settings_page = SettingsPage(context)
 
 
 def after_scenario(context, scenario):
