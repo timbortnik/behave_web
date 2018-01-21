@@ -24,11 +24,3 @@ def step_impl(context):
     time.sleep(3)
 
 
-# @when('we check status')
-# def step_impl(context):
-#     assert context.lobby_page.find_away_user_status()
-
-# def step_impl(context):
-#     context.authorized_page.navigate()
-#     assert context.authorized_page.at()
-
