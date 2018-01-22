@@ -22,7 +22,8 @@ from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
 from pages.settings_page import SettingsPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
-import datetime, time
+import datetime
+import time
 
 
 def get_date_time():
@@ -34,7 +35,7 @@ def before_all(context):
     context.hipchat_login = HIPCHAT_LOGIN
     context.hipchat_pass = HIPCHAT_PASS
 
-    context.base_url = "https://www.hipchat.com"
+    context.base_url = "https://bortnik.hipchat.com"
     context.driver = webdriver.Chrome()
 
     context.login_page = LoginPage(context)

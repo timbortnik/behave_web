@@ -42,5 +42,5 @@ jobs:
             behave
 
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: scenario_result
+          destination: scenario_result
