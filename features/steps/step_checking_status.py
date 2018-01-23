@@ -2,7 +2,7 @@ from behave import when
 import time
 
 
-@when ('we get full user name from settings')
+@when('we get full user name from settings')
 def get_full_name(context):
     context.settings_page.full_name()
 
@@ -10,6 +10,7 @@ def get_full_name(context):
 @when('we are in chat window')
 def step_impl1(context):
     context.lobby_page.navigate()
+    context.lobby_page.check_ico(user_name)
     time.sleep(3)
 
 
@@ -32,5 +33,4 @@ def step_impl(context):
     context.lobby_page.click_available()
     assert context.lobby_page.find_available_user_status()
     time.sleep(3)
-
 
