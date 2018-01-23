@@ -1,21 +1,17 @@
 from behave import when
 import time
 
+FULL_NAME = None
 
 @when('we get full user name from settings')
 def get_full_name(context):
-    context.settings_page.full_name()
+    global FULL_NAME
+    FULL_NAME = context.settings_page.full_name()
 
 
 @when('we are in chat window')
 def step_impl1(context):
     context.lobby_page.navigate()
-    context.lobby_page.check_ico(user_name)
-    time.sleep(3)
-
-
-def step_impl(context):
-    context.authorized_page.enter_app()
     time.sleep(6)
 
 
@@ -23,14 +19,14 @@ def step_impl(context):
 def step_impl(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_away()
-    assert context.lobby_page.find_away_user_status()
+    assert 'xa' in context.lobby_page.check_ico(FULL_NAME)
     time.sleep(3)
     context.lobby_page.click_dropdown()
     context.lobby_page.click_do_not_disturb()
-    assert context.lobby_page.find_do_not_disturb_user_status()
+    assert '#icon-dnd-selected' in context.lobby_page.check_ico(FULL_NAME)
     time.sleep(3)
     context.lobby_page.click_dropdown()
     context.lobby_page.click_available()
-    assert context.lobby_page.find_available_user_status()
+    assert '#icon-available-selected' in context.lobby_page.check_ico(FULL_NAME)
     time.sleep(3)
 

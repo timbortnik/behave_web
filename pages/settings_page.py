@@ -15,7 +15,6 @@ class SettingsPage(Page):
 
     def full_name(self):
         return self.context.driver.find_element_by_id('name').get_attribute('value')
-    user_name = full_name()
 
     def email(self):
         return self.context.driver.find_element_by_id('email').get_attribute('value')

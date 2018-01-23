@@ -31,15 +31,16 @@ class LobbyPage(Page):
     def find_available_user_status(self):
         return self.context.driver.find_element_by_id('icon-available-selected')
 
-    def check_ico(self, user_name):
+    def check_ico(self, full_name):
         divs_list = []
         divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
         for i in divs:
             divs_list.append(i)
-            if i.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == 'Sergey Moroz Test':
+            if i.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == 'Aned4enko_test':
                 print(len(divs_list))
                 ico = divs_list[len(divs_list) - 1].find_element_by_css_selector(
                     '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use').get_attribute(
                     'xlink:href')
-                print(ico)
+                dict = {}
+                dict[full_name] = str(ico)
                 return str(ico)
