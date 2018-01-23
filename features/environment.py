@@ -24,7 +24,8 @@ from pages.settings_page import SettingsPage
 from pages.lobby_page import LobbyPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
 import selenium.webdriver.support.ui as ui
-import datetime, time
+import datetime
+import time
 
 
 def get_date_time():
@@ -36,7 +37,7 @@ def before_all(context):
     context.hipchat_login = HIPCHAT_LOGIN
     context.hipchat_pass = HIPCHAT_PASS
 
-    context.base_url = "https://www.hipchat.com"
+    context.base_url = "https://bortnik.hipchat.com"
     context.driver = webdriver.Chrome()
 
     context.login_page = LoginPage(context)

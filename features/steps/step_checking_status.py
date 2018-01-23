@@ -1,11 +1,21 @@
-from behave import given, when
+from behave import when
 import time
 
 
-@given('we are in chat window')
+@when ('we get full user name from settings')
+def get_full_name(context):
+    context.settings_page.full_name()
+
+
+@when('we are in chat window')
+def step_impl1(context):
+    context.lobby_page.navigate()
+    time.sleep(3)
+
+
 def step_impl(context):
     context.authorized_page.enter_app()
-    time.sleep(3)
+    time.sleep(6)
 
 
 @when('we change status for all available cases')
