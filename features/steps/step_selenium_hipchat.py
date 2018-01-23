@@ -30,4 +30,3 @@ def step_impl(context):
 @then('we see welcome title')
 def step_impl(context):
     assert "Welcome," in context.authorized_page.get_page_head()
-
