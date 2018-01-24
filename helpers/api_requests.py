@@ -2,46 +2,18 @@
 
 import requests
 import json
-token_group = 'nJQhJG3Kg60vubHtug2msT9yc4O7CUPFXwI442hN'
+
+BASE_URL = 'https://bortnik.hipchat.com'
+#in future we can use context.base_url instead of BASE_URL and token from env.secret
 
 class ApiRequest(object):
 
-    def api_get(self, **kwargs):
-        url = 'https://bortnik.hipchat.com/v2/user'
-        headers_get = {'Authorization': token_group}
-        payload = {
-            'start-index': 1,
-            'max-results': 1,
-            'include-guests': None,
-            'include-deleted': None
-        }
+    def _get(self, url, payload, token):
+        r = requests.get(BASE_URL + url, payload, headers = {'Authorization':'Bearer ' + token})
+        return json.loads(r.text)
 
-
-        headers_post = {
-            "content-type": "application/json",
-            "authorization": "Bearer %s" % token_group}
-
-        url = 'https://bortnik.hipchat.com/v2/user'
-
-
-        # payload = {
-        #     "name": "Sergey Moroz API",
-        #     "roles": [],
-        #     "title": "sergeyApi",
-        #     "mention_name": "@sergeyApi",
-        #     "is_group_admin": False,
-        #     "timezone": "UTC",
-        #     "password": "api",
-        #     "email": "testmail@com",
-        #    }
-
-        r = requests.get(url, params=payload, headers={'Authorization': 'Bearer ' + token_group})
-        # r = requests.post(url, data=json.dumps(payload), headers=headers_post)
-
-        # print(r.text)
-        # print(r.status_code)
-        # print(r.json())
-
-
-        json_data = json.loads(r.text)
-        print(json_data['items'][0]['name'])
+    def get_user(self, startindex = None, maxresults = None, includeguests = None, includedeleted = None):
+        return self._get('/v2/user', {'start-index': startindex,
+                                        'max-results': maxresults,
+                                        'include-guests': includeguests,
+                                        'include-deleted': includedeleted}, token='nJQhJG3Kg60vubHtug2msT9yc4O7CUPFXwI442hN')
