@@ -3,6 +3,7 @@ import time
 
 FULL_NAME = None
 
+
 @when('we get full user name from settings')
 def get_full_name(context):
     global FULL_NAME
@@ -18,15 +19,25 @@ def step_impl1(context):
 @when('we change status for all available cases')
 def step_impl(context):
     context.lobby_page.click_dropdown()
+    time.sleep(2)
     context.lobby_page.click_away()
-    assert 'xa' in context.lobby_page.check_ico(FULL_NAME)
-    time.sleep(3)
+    time.sleep(2)
+    status_str = context.lobby_page.check_ico(FULL_NAME)
+    print(status_str)
+    assert 'icon-xa' in status_str
+    time.sleep(2)
     context.lobby_page.click_dropdown()
     context.lobby_page.click_do_not_disturb()
-    assert '#icon-dnd-selected' in context.lobby_page.check_ico(FULL_NAME)
-    time.sleep(3)
+    time.sleep(2)
+    status_str = context.lobby_page.check_ico(FULL_NAME)
+    print(status_str)
+    assert 'icon-dnd' in status_str
+    time.sleep(2)
     context.lobby_page.click_dropdown()
     context.lobby_page.click_available()
-    assert '#icon-available-selected' in context.lobby_page.check_ico(FULL_NAME)
-    time.sleep(3)
+    time.sleep(2)
+    status_str = context.lobby_page.check_ico(FULL_NAME)
+    print(status_str)
+    assert 'icon-avail' in status_str
+    time.sleep(2)
 
