@@ -7,6 +7,7 @@ class LobbyPage(Page):
     """
     url = '/chat'
 
+
     def open_dropdown(self):
         return self.context.driver.find_element_by_id("status_dropdown")
 
@@ -31,16 +32,20 @@ class LobbyPage(Page):
     def find_available_user_status(self):
         return self.context.driver.find_element_by_id('icon-available-selected')
 
-    def check_ico(self, full_name):
-        #divs_list = []
+    def find_element_by_username(self, username):
         divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
-        for i in divs:
-            #divs_list.append(i)
-            if i.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == full_name:
-                #print(len(divs_list))
-                ico = i.find_element_by_css_selector(
-                    '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use').get_attribute(
-                    'xlink:href')
-                #dict = {}
-                #dict[full_name] = str(ico)
-                return str(ico)
+        for div in divs:
+            if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
+                return div
+        return False
+
+    @staticmethod
+    def find_ico_in_div(div):
+        return div.find_element_by_css_selector(
+            '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
+
+    # @staticmethod
+    # def check_ico(div):
+    #     return div.find_element_by_css_selector(
+    #         '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use').get_attribute(
+    #         'xlink:href')
