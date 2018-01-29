@@ -19,6 +19,12 @@ class SettingsPage(Page):
     def email(self):
         return self.context.driver.find_element_by_id('email').get_attribute('value')
 
+    def api_access(self):
+        self.context.driver.find_element_by_link_text('API access').click()
+
+    def api_submit(self):
+        self.context.driver.find_element_by_id('submit').click()
+
     @staticmethod
     def check_if_exist(*args):
         for i in args:
