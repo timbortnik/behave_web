@@ -50,6 +50,7 @@ class LobbyPage(Page):
         self.context.driver.find_element_by_xpath('//a[text()="Invite People"]').click()
 
 
+
     def send_invite(self):
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_invite-users-people')))
         self.context.driver.find_element_by_css_selector('#s2id_invite-users-people').click()

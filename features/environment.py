@@ -20,11 +20,10 @@ from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
 from pages.lobby_page import LobbyPage
-import selenium.webdriver.support.ui as ui
-from pages.settings_page import SettingsPage
-from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS, HIPCHAT_LOGIN_2, HIPCHAT_PASS_2
+from features.environment_secret import HIPCHAT_LOGIN_2, HIPCHAT_PASS_2
 from pages.api_page import ApiPage
 from pages.settings_page import SettingsPage
+from pages.people_page import PeoplePage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
 import selenium.webdriver.support.ui as ui
 import datetime
@@ -49,6 +48,7 @@ def before_all(context):
     context.lobby_page = LobbyPage(context)
     context.api_page = ApiPage(context)
     context.settings_page = SettingsPage(context)
+    context.people_page = PeoplePage(context)
     context.wait = ui.WebDriverWait(context.driver, 10)
 
 
