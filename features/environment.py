@@ -20,6 +20,7 @@ before_tag(context, tag), after_tag(context, tag)
 from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
+from pages.api_page import ApiPage
 from pages.settings_page import SettingsPage
 from pages.lobby_page import LobbyPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
@@ -42,18 +43,20 @@ def before_all(context):
 
     context.login_page = LoginPage(context)
     context.authorized_page = AuthorizedPage(context)
-
+    context.api_page = ApiPage(context)
     context.lobby_page = LobbyPage(context)
-    context.wait = ui.WebDriverWait(context.driver, 10)
     context.settings_page = SettingsPage(context)
+    context.wait = ui.WebDriverWait(context.driver, 10)
 
 
 def after_scenario(context, scenario):
     if scenario.status == "failed":
         context.driver.save_screenshot('scenario_result/'+scenario.name + get_date_time() + "_failed.png")
+        file = open('scenario_result/'+scenario.name+get_date_time()+'.html', 'w')
+        file.write(context.driver.page_source)
+        file.close()
 
 
 def after_all(context):
     context.driver.quit()
-
 

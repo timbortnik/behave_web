@@ -28,3 +28,9 @@ class LoginPage(Page):
 
     def login(self):
         self.btn_signin().click()
+
+    def login_error_tooltip(self):
+        return self.context.driver.find_element_by_css_selector('.error-field').text
+
+    def validation_error_tooltip(self):
+        return self.context.driver.find_element_by_css_selector('.aui-message-error p').text
