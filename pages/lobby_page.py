@@ -1,16 +1,54 @@
 # -*- coding: UTF-8 -*-
-import time
 
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.keys import Keys
 from .base_page import Page
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from random import randint
 
+
 class LobbyPage(Page):
     """
-    Start page for logged in user
+    Chat page
     """
-    url = '/chat'
+
+    url = '/chat/lobby'
+
+    def open_rooms_list(self):
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        for i in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
+            if i.text == 'Rooms':
+                i.click()
+
+    def open_room_by_name(self,name):
+        for i in self.context.driver.find_elements_by_css_selector('.hc-lobby-list-names span.groupchat'):
+            if i.text == name:
+                i.click()
+                break
+        try:
+            self.context.wait.until(lambda driver: driver.find_element_by_class_name('hc-chat-msg'))
+        except TimeoutException:
+            pass
+
+    def room_send_msg(self, msg):
+        msg_field = self.context.driver.find_element_by_id('hc-message-input')
+        if msg == '/clear':
+            msg_field.send_keys('/clear')
+            msg_field.send_keys(Keys.RETURN)
+            self.context.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'hc-chat-msg')))
+        else:
+            self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
+            msg_field.send_keys(msg+Keys.RETURN)
+
+    def check_is_ping(self, msg):
+        self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.msg-line.msg-line div.msg-line'))
+        self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.notification.msg-line'))
+        msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
+        ment_names = msgs[len(msgs)-1].find_element_by_css_selector('span').text
+        return msg == msgs[len(msgs)-1].text[len(ment_names)+1:]
+
+
     room_name = str(randint(1, 999))
 
     def create_room(self):
@@ -48,7 +86,6 @@ class LobbyPage(Page):
         self.context.driver.find_element_by_id('room-actions-btn').click()
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[text()="Invite People"]')))
         self.context.driver.find_element_by_xpath('//a[text()="Invite People"]').click()
-
 
     def send_invite(self):
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_invite-users-people')))
