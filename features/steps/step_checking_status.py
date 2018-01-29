@@ -1,8 +1,9 @@
-from behave import when
+from behave import when, then
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from features.icon_in_div_changed import IconInDivChanged
-import time
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.by import By
 
 FULL_NAME = None
 driver = webdriver.Chrome
@@ -20,33 +21,34 @@ def get_full_name(context):
 @when('we are in chat window')
 def step_impl1(context):
     context.lobby_page.navigate()
-    time.sleep(6)
-    # self.context.wait.until()
 
 
-@when('we change status for all available cases')
-def step_impl(context):
+@then('we change status to "away"')
+def stat_away(context):
+    context.wait.until(ec.presence_of_element_located((By.ID, 'status_dropdown')))
     context.lobby_page.click_dropdown()
     context.lobby_page.click_away()
-    # time.sleep(1)
     wait = WebDriverWait(driver, 10)
     div = context.lobby_page.find_element_by_username(FULL_NAME)
     status_str = wait.until(IconInDivChanged(div, status_shortcuts['available']))
-    print(status_str)
     assert status_shortcuts['away'] in status_str
+
+
+@then('we change status to "do not disturb"')
+def stat_dnd(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_do_not_disturb()
-    # time.sleep(1)
     wait = WebDriverWait(driver, 10)
     div = context.lobby_page.find_element_by_username(FULL_NAME)
     status_str = wait.until(IconInDivChanged(div, status_shortcuts['away']))
-    print(status_str)
     assert status_shortcuts['do not disturb'] in status_str
+
+
+@then('we change status to "available"')
+def stat_available(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_available()
     wait = WebDriverWait(driver, 10)
     div = context.lobby_page.find_element_by_username(FULL_NAME)
     status_str = wait.until(IconInDivChanged(div, status_shortcuts['do not disturb']))
-    print(status_str)
     assert status_shortcuts['available'] in status_str
-    time.sleep(2)
