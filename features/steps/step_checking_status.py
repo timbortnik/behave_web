@@ -1,7 +1,7 @@
 from behave import when, then
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
-from features.icon_in_div_changed import IconInDivChanged
+from helpers.icon_in_div_changed import IconInDivChanged
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
