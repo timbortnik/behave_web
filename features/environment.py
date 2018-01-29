@@ -16,10 +16,13 @@ before_tag(context, tag), after_tag(context, tag)
 
 """
 
-
 from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
+from pages.lobby_page import LobbyPage
+import selenium.webdriver.support.ui as ui
+from pages.settings_page import SettingsPage
+from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS, HIPCHAT_LOGIN_2, HIPCHAT_PASS_2
 from pages.api_page import ApiPage
 from pages.settings_page import SettingsPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
@@ -36,12 +39,14 @@ def get_date_time():
 def before_all(context):
     context.hipchat_login = HIPCHAT_LOGIN
     context.hipchat_pass = HIPCHAT_PASS
-
+    context.hipchat_login_2 = HIPCHAT_LOGIN_2
+    context.hipchat_pass_2 = HIPCHAT_PASS_2
     context.base_url = "https://bortnik.hipchat.com"
     context.driver = webdriver.Chrome()
-
+    context.wait = ui.WebDriverWait(context.driver, 10)
     context.login_page = LoginPage(context)
     context.authorized_page = AuthorizedPage(context)
+    context.lobby_page = LobbyPage(context)
     context.api_page = ApiPage(context)
     context.settings_page = SettingsPage(context)
     context.wait = ui.WebDriverWait(context.driver, 10)
