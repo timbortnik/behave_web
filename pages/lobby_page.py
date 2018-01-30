@@ -1,5 +1,4 @@
-# -*- coding: UTF-8 -*-
-
+import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from .base_page import Page
@@ -124,3 +123,121 @@ class LobbyPage(Page):
             self.context.driver.find_element_by_css_selector('.delete-room-action').click()
             self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//button[text()="Delete room"]')))
             self.context.driver.find_element_by_xpath('//button[text()="Delete room"]').click()
+
+    def open_alias_room(self):
+        self.find_alias_room().click()
+
+    def find_alias_room(self):
+        self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
+        return self.context.driver.find_element_by_xpath("//a[@aria-label='Alias room']")
+
+    def input_comands_in_field(self):
+        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
+        self.find_input_field().send_keys('/clear')
+        self.find_input_field().send_keys(Keys.ENTER)
+
+        self.find_input_field().send_keys('/alias set @gtest @HenaYamkoviy')
+        self.find_input_field().send_keys(Keys.ENTER)
+        self.find_input_field().send_keys(Keys.ENTER)
+
+    def find_input_field(self):
+        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
+        return self.context.driver.find_element_by_id('hc-message-input')
+
+    def find_input_alias(self):
+        self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
+        return self.context.driver.find_elements_by_css_selector('.notification.msg-line')
+
+    def get_text_from_alias_bot(self):
+        for n in self.find_input_alias():
+            print(n.text)
+            for word in n.text.split():
+                if '@gtest' in word:
+                    return True
+
+    def chat_adding_alias(self):
+        self.input_comands_in_field()
+        return self.get_text_from_alias_bot()
+
+    def random_click(self):
+        self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
+        self.find_element_for_random_click().click()
+
+    def find_element_for_random_click(self):
+        self.context.wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Filter']")))
+        return self.context.driver.find_element_by_xpath("//input[@placeholder='Filter']")
+
+    def open_alias_menu(self):
+        self.find_plus_button().click()
+
+    def click_for_focus_near_plus_button(self):
+        self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'textarea#hc-message-input')))
+        self.context.driver.find_element_by_css_selector('textarea#hc-message-input').click()
+
+    def find_plus_button(self):
+        self.click_for_focus_near_plus_button()
+        self.context.wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, 'div.hc-dropdown>button#input_actions_dropdown-trigger')))
+        return self.context.driver.find_element_by_css_selector('div.hc-dropdown>button#input_actions_dropdown-trigger')
+
+    def open_menu(self):
+        self.find_button_in_dropdown_menu().click()
+
+    def find_button_in_dropdown_menu(self):
+        self.context.wait.until(EC.presence_of_element_located((By.XPATH, ('//a[@data-addon_key="hc-alias"]'))))
+        return self.context.driver.find_element_by_xpath('//a[@data-addon_key="hc-alias"]')
+
+    def focus_at_alias_config_window(self):
+        time.sleep(3)
+        return self.context.wait.until(EC.frame_to_be_available_and_switch_to_it((By.CLASS_NAME, 'hc-addon-iframe')))
+
+    def open_config(self):
+        self.context.wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, 'div>div>.aui-button.aui-button-link')))
+        self.context.driver.find_element_by_css_selector('div>div>.aui-button.aui-button-link').click()
+
+    def put_data_into_the_frame(self):
+            self.open_config()
+            self.input_data_in_alias_form()
+            self.input_data_in_alias_name_form()
+
+    def input_data_in_alias_form(self):
+        self.find_alias_form().send_keys("@test")
+
+    def find_alias_form(self):
+        self.context.wait.until(EC.presence_of_element_located((By.NAME, 'alias')))
+        return self.context.driver.find_element_by_name('alias')
+
+    def input_data_in_alias_name_form(self):
+        self.find_form_name().send_keys('HenaYamkoviy')
+        self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="HenaYamkoviy"]')))
+        self.adding_data()
+
+    def adding_data(self):
+        self.find_form_name().send_keys(Keys.ARROW_DOWN)
+        self.find_form_name().send_keys(Keys.ARROW_DOWN)
+        self.find_form_name().send_keys(Keys.ENTER)
+        self.find_form_name().send_keys(Keys.ENTER)
+
+    def find_form_name(self):
+        return self.context.driver.find_element(By.CSS_SELECTOR, 'div.Select-input>input')
+
+    def find_added_element(self):
+        self.context.wait.until(
+            lambda driver: self.context.driver.find_elements_by_css_selector('.aui>.aliases>.alias>.mentions'))
+        table = self.context.driver.find_elements_by_css_selector('.aui>.aliases>.alias>.mentions')
+
+        result = False
+        for element in table:
+            if element.text == "@HenaYamkoviy":
+                result = True
+        return result
+
+    def delete_ico(self):
+        self.context.wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "a.aui-icon.aui-icon-small.aui-iconfont-delete.delete")))
+        return self.context.driver.find_elements_by_css_selector('a.aui-icon.aui-icon-small.aui-iconfont-delete.delete')
+
+    def click_delete_ico(self):
+        for delete in self.delete_ico():
+            delete.click()
