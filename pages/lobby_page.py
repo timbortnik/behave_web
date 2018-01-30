@@ -51,6 +51,7 @@ class LobbyPage(Page):
 
     def create_room_by_name(self, name):
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        self.context.wait.until(lambda driver: driver.find_element_by_css_selector('span.room-name'))
         self.find_btn().click()
         self.context.wait.until(EC.visibility_of_element_located((By.ID, 'create-room-name')))
         self.find_set_name().send_keys(name)
