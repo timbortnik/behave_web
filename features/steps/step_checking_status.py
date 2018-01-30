@@ -1,7 +1,7 @@
 from behave import when, then
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
-from helpers.icon_in_div_changed import IconInDivChanged
+from helpers.icon_in_div_changed import LobbyPageIconInDivChanged
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
@@ -30,7 +30,7 @@ def stat_away(context):
     context.lobby_page.click_away()
     wait = WebDriverWait(driver, 10)
     div = context.lobby_page.find_element_by_username(FULL_NAME)
-    status_str = wait.until(IconInDivChanged(div, status_shortcuts['available']))
+    status_str = wait.until(LobbyPageIconInDivChanged(context.lobby_page, div, status_shortcuts['available']))
     assert status_shortcuts['away'] in status_str
 
 
@@ -40,7 +40,7 @@ def stat_dnd(context):
     context.lobby_page.click_do_not_disturb()
     wait = WebDriverWait(driver, 10)
     div = context.lobby_page.find_element_by_username(FULL_NAME)
-    status_str = wait.until(IconInDivChanged(div, status_shortcuts['away']))
+    status_str = wait.until(LobbyPageIconInDivChanged(context.lobby_page, div, status_shortcuts['away']))
     assert status_shortcuts['do not disturb'] in status_str
 
 
@@ -50,5 +50,5 @@ def stat_available(context):
     context.lobby_page.click_available()
     wait = WebDriverWait(driver, 10)
     div = context.lobby_page.find_element_by_username(FULL_NAME)
-    status_str = wait.until(IconInDivChanged(div, status_shortcuts['do not disturb']))
+    status_str = wait.until(LobbyPageIconInDivChanged(context.lobby_page, div, status_shortcuts['do not disturb']))
     assert status_shortcuts['available'] in status_str
