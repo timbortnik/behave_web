@@ -29,7 +29,8 @@ class LobbyPage(Page):
         try:
             self.context.wait.until(lambda driver: driver.find_element_by_class_name('hc-chat-msg'))
         except TimeoutException:
-            pass
+            self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
+            return True
 
     def room_send_msg(self, msg):
         msg_field = self.context.driver.find_element_by_id('hc-message-input')
@@ -47,6 +48,16 @@ class LobbyPage(Page):
         msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
         ment_names = msgs[len(msgs)-1].find_element_by_css_selector('span').text
         return msg == msgs[len(msgs)-1].text[len(ment_names)+1:]
+
+    def create_room_by_name(self, name):
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        self.find_btn().click()
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'create-room-name')))
+        self.find_set_name().send_keys(name)
+        self.context.wait.until(
+            EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
+        self.find_create_btn().click()
+        self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@class="hc-glance clickable"]')))
 
 
     room_name = str(randint(1, 999))
