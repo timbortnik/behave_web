@@ -7,7 +7,6 @@ class LobbyPage(Page):
     """
     url = '/chat'
 
-
     def open_dropdown(self):
         return self.context.driver.find_element_by_id("status_dropdown")
 
@@ -43,9 +42,3 @@ class LobbyPage(Page):
     def find_ico_in_div(div):
         return div.find_element_by_css_selector(
             '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
-
-    # @staticmethod
-    # def check_ico(div):
-    #     return div.find_element_by_css_selector(
-    #         '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use').get_attribute(
-    #         'xlink:href')
