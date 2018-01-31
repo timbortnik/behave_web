@@ -19,4 +19,3 @@ Scenario: Check incorrect password to Hipchat
     When we enter login
     And we enter incorrect password
     Then we see password validation tooltip
-
