@@ -5,17 +5,22 @@ from helpers.icon_in_div_changed import IconInDivChanged
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
+
 FULL_NAME = None
 driver = webdriver.Chrome
 status_shortcuts = {'available': 'icon-avail',
                     'away': 'icon-xa',
                     'do not disturb': 'icon-dnd'}
 
+def change_FN(name):
+    global FULL_NAME
+    FULL_NAME = name
 
 @when('we get full user name from settings')
 def get_full_name(context):
     global FULL_NAME
     FULL_NAME = context.settings_page.full_name()
+    print(FULL_NAME)
 
 
 @when('we are in chat window')

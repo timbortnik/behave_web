@@ -10,6 +10,7 @@ class SettingsPage(Page):
 
     url = '/account'
 
+
     def mention_name(self):
         return self.context.driver.find_element_by_id('mention_name').get_attribute('value')
 
@@ -24,6 +25,7 @@ class SettingsPage(Page):
 
     def api_submit(self):
         self.context.driver.find_element_by_id('submit').click()
+
 
     @staticmethod
     def check_if_exist(*args):
