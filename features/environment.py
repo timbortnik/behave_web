@@ -18,9 +18,9 @@ before_tag(context, tag), after_tag(context, tag)
 
 from selenium import webdriver
 from pages.login_page import LoginPage
-from pages.lobby_page import LobbyPage
 from pages.authorized_page import AuthorizedPage
-from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS, HIPCHAT_LOGIN_2, HIPCHAT_PASS_2
+from pages.people_page import PeoplePage
+from features.environment_secret import HIPCHAT_LOGIN_2, HIPCHAT_PASS_2
 from pages.api_page import ApiPage
 from pages.settings_page import SettingsPage
 from pages.lobby_page import LobbyPage
@@ -43,13 +43,12 @@ def before_all(context):
     context.base_url = "https://bortnik.hipchat.com"
     context.driver = webdriver.Chrome()
     context.wait = ui.WebDriverWait(context.driver, 10)
-
     context.lobby_page = LobbyPage(context)
     context.login_page = LoginPage(context)
     context.authorized_page = AuthorizedPage(context)
-    context.lobby_page = LobbyPage(context)
     context.api_page = ApiPage(context)
     context.settings_page = SettingsPage(context)
+    context.people_page = PeoplePage(context)
 
 
 def after_scenario(context, scenario):

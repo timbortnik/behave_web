@@ -47,7 +47,6 @@ class LobbyPage(Page):
         ment_names = msgs[len(msgs)-1].find_element_by_css_selector('span').text
         return msg == msgs[len(msgs)-1].text[len(ment_names)+1:]
 
-
     room_name = str(randint(1, 999))
 
     def create_room(self):
