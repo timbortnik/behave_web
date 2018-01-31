@@ -1,8 +1,6 @@
 from .base_page import Page
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-import time
-# from random import randint
 
 
 class PeoplePage(Page):
@@ -24,9 +22,7 @@ class PeoplePage(Page):
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))
 
     def open_user_page(self):
-        self.context.driver.find_element_by_xpath(
-            '//*[@id="content"]/div/div/section/table/tbody/tr[1]/td[1]/span[2]/a').click()
-        time.sleep(5)
+        self.context.driver.find_element_by_xpath('//a[contains(text(), "Aned4enko")]').click()
 
     def label_page_head_on_user_page(self):
         return self.context.driver.find_element_by_css_selector("div.aui-item > h2").text
