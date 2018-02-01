@@ -15,8 +15,14 @@ Scenario: Check incorrect and not valid login to Hipchat
     When we enter not valid login
     Then we see login validation tooltip
 
+Scenario: Check disabled button
+    When we check disabled next button
+
 Scenario: Check incorrect password to Hipchat
     When we enter login
     And we enter incorrect password
     Then we see password validation tooltip
 
+Scenario: Check backspace button, logining with Enter
+    Then we check backspace icon
+    When we check logining with press Enter
