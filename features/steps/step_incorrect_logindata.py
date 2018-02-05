@@ -42,18 +42,21 @@ def step_impl(context):
 def step_impl(context):
     assert 'Invalid email and/or password!' in context.login_page.validation_error_tooltip()
 
+
 @when('we check disabled next button')
 def step_impl(context):
     context.login_page.input_incorrect_email_data()
     context.login_page.press_next_button()
     assert context.login_page.button_check_disabled()
 
+
 @then('we check backspace icon')
 def step_impl(context):
     context.login_page.enter_login(context.hipchat_login)
     context.login_page.email_input_form_press_enter()
     context.login_page.click_on_backspace_icon()
-    assert '/login' in context.login_page.check_where_bot()
+    assert '/login' in context.login_page.current_url()
+
 
 @when('we check logining with press Enter')
 def step_impl(context):

@@ -62,5 +62,5 @@ class LoginPage(Page):
     def click_on_backspace_icon(self):
         self.backspace_icon().click()
 
-    def check_where_bot(self):
-        self.context.driver.current_url()
+    def current_url(self):
+        return self.context.driver.current_url
