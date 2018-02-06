@@ -35,10 +35,7 @@ class PeoplePage(Page):
         self.context.driver.find_element_by_xpath('//a[contains(text(), "' + cs.FULL_NAME + '")]').click()
 
     def label_page_head_on_user_page(self):
-        return self.context.driver.find_element_by_css_selector("div.aui-item > h2")
-
-    def get_label_page_head_on_user_page(self):
-        return self.label_page_head_on_user_page().text
+        return self.context.driver.find_element_by_css_selector("div.aui-item > h2").text
 
     def we_see_all_users(self):
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))

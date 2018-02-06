@@ -13,7 +13,7 @@ status_shortcuts = {'available': 'icon-avail',
                     'do not disturb': 'icon-dnd'}
 
 
-def change_FN(name):
+def change_full_name(name):
     global FULL_NAME
     FULL_NAME = name
 
@@ -22,7 +22,6 @@ def change_FN(name):
 def get_full_name(context):
     global FULL_NAME
     FULL_NAME = context.settings_page.full_name()
-    print(FULL_NAME)
 
 
 @when('we are in chat window')
