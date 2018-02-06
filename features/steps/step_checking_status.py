@@ -13,6 +13,11 @@ status_shortcuts = {'available': 'icon-avail',
                     'do not disturb': 'icon-dnd'}
 
 
+def change_full_name(name):
+    global FULL_NAME
+    FULL_NAME = name
+
+
 @when('we get full user name from settings')
 def get_full_name(context):
     global FULL_NAME

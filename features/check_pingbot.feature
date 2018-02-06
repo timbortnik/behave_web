@@ -1,3 +1,4 @@
+
 Feature: Checking account settings
 
 Background:
@@ -6,7 +7,8 @@ Background:
     And we enter password
     Then we see Welcome title
 
-Scenario: Check account settings
-    Given we are on Account settings Page
-    Then we see filled account settings
-
+Scenario: Check pingbot room
+    Given we are on Lobby Page
+    Then we open pingbot room
+    When we send message
+    Then we receive pingbot reply
