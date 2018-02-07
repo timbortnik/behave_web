@@ -22,8 +22,6 @@ class PeoplePage(Page):
 
     def show_all_users(self):
         self.context.driver.find_element_by_id('show_all_users').click()
-        self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))
-        users = self.context.driver.find_elements_by_xpath('//a[@class="name"]')
 
     def we_see_all_users(self):
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))

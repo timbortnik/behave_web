@@ -21,4 +21,3 @@ def step_impl(context):
 def step_impl(context):
     context.people_page.we_filter()
     context.people_page.we_filter_incorrect()
-
