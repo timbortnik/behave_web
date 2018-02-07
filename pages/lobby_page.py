@@ -5,6 +5,7 @@ from .base_page import Page
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from random import randint
+from selenium.webdriver.common.keys import Keys
 
 
 class LobbyPage(Page):
@@ -99,29 +100,32 @@ class LobbyPage(Page):
         self.find_invite().click()
 
     def accept_invite(self):
-        from selenium.webdriver.common.keys import Keys
-        try:
+        if "chat" in self.context.driver.current_url:
             room_xpath = '//div[contains(@class,"hc-lobby-panel-content")]//span[text()="'+LobbyPage.room_name+'"]'
             self.context.driver.find_element_by_xpath(room_xpath).click()
             self.context.driver.find_element_by_id('hc-message-input').send_keys('@all', Keys.RETURN, Keys.RETURN)
             self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="msg-line"]')))
-        except:
+        elif "room" in self.context.driver.current_url:
             self.context.driver.find_element_by_id('hc-message-input').send_keys('@all', Keys.RETURN, Keys.RETURN)
             self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="msg-line"]')))
 
     def delete_room(self):
-        try:
+        if "chat" in self.context.driver.current_url:
             room_xpath = '//div[contains(@class,"hc-lobby-panel-content")]//span[text()="'+LobbyPage.room_name+'"]'
             self.context.driver.find_element_by_xpath(room_xpath).click()
             self.context.driver.find_element_by_id('room-actions-btn').click()
             self.context.driver.find_element_by_css_selector('.delete-room-action').click()
             self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//button[text()="Delete room"]')))
             self.context.driver.find_element_by_xpath('//button[text()="Delete room"]').click()
-        except:
+            time.sleep(1)
+            # in theory this should help with problem "ghost" rooms,
+        elif "room" in self.context.driver.current_url:
             self.context.driver.find_element_by_id('room-actions-btn').click()
             self.context.driver.find_element_by_css_selector('.delete-room-action').click()
             self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//button[text()="Delete room"]')))
             self.context.driver.find_element_by_xpath('//button[text()="Delete room"]').click()
+            time.sleep(1)
+            # but we will know about that just when this will in master
 
     def open_alias_room(self):
         self.find_alias_room().click()
