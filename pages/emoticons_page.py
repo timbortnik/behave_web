@@ -7,7 +7,11 @@ import os
 
 
 class EmoticonsPage(Page):
-    # TODO maybe you need to add description for page here
+
+    """
+    Emoticons creation page
+    """
+
     url = '/emoticons'
 
     def go_to_filepicker(self):
@@ -17,8 +21,7 @@ class EmoticonsPage(Page):
         self.context.wait.until(EC.visibility_of_element_located((By.ID, 'shortcut_0')))
         self.context.driver.find_element_by_id('shortcut_0').send_keys('test')
 
-    def upload_image(self):
-        # TODO change method name, just add "emoticon" in the end
+    def upload_image_emoticon(self):
         img_path = os.getcwd() + '/doc/behave_web.png'
         self.context.driver.find_element_by_id('Filedata_0').send_keys(img_path)
 
