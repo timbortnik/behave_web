@@ -20,8 +20,8 @@ def step_impl(context):
 
 @when('we send message')
 def step_impl(context):
-    context.lobby_page.room_send_msg('/clear')
-    context.lobby_page.room_send_msg('/ping me with 223')
+    context.lobby_page.send_msg_in_room('/clear')
+    context.lobby_page.send_msg_in_room('/ping me with 223')
 
 
 @then('we receive pingbot reply')

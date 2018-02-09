@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from random import randint
 from selenium.webdriver.common.keys import Keys
+import time
 
 
 class LobbyPage(Page):
@@ -16,36 +17,35 @@ class LobbyPage(Page):
     url = '/chat/lobby'
 
     def open_rooms_list(self):
-        # TODO variable "i" looks poor, please provide some description
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
-        for i in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
-            if i.text == 'Rooms':
-                i.click()
+        for element in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
+            if element.text == 'Rooms':
+                element.click()
 
     def open_room_by_name(self,name):
-        # TODO variable "i" looks poor, please provide some description
-        for i in self.context.driver.find_elements_by_css_selector('.hc-lobby-list-names span.groupchat'):
-            if i.text == name:
-                i.click()
+        for room in self.context.driver.find_elements_by_css_selector('.hc-lobby-list-names span.groupchat'):
+            if room.text == name:
+                room.click()
                 break
                 # TODO I think you should try to replace "try" function, if it possible
                 # TODO We don't find where you using this function, please provide us, or remove it
+                # TODO For previous comment -> step_pingbot -> @then('we open pingbot room')
         try:
             self.context.wait.until(lambda driver: driver.find_element_by_class_name('hc-chat-msg'))
         except TimeoutException:
             pass
 
-    def room_send_msg(self, msg):
-        # TODO this(msg_field) variable should be in separated method
-        # TODO and make method name more informative
-        msg_field = self.context.driver.find_element_by_id('hc-message-input')
+    def find_msg_field(self):
+        return self.context.driver.find_element_by_id('hc-message-input')
+
+    def send_msg_in_room(self, msg):
         if msg == '/clear':
-            msg_field.send_keys('/clear')
-            msg_field.send_keys(Keys.RETURN)
+            LobbyPage.find_msg_field(self).send_keys('/clear')
+            LobbyPage.find_msg_field(self).send_keys(Keys.RETURN)
             self.context.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'hc-chat-msg')))
         else:
             self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
-            msg_field.send_keys(msg+Keys.RETURN)
+            LobbyPage.find_msg_field(self).send_keys(msg+Keys.RETURN)
 
     def check_is_ping(self, msg):
         # TODO if it possible, replace this waits for EC
@@ -75,7 +75,7 @@ class LobbyPage(Page):
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
 
     def find_create_btn(self):
-        # TODO This function same with find_btn(line 64)
+        # TODO This function same with find_btn(line 64) // 1st for link that open popup window with button from 2nd . Dont touch or make beeter but dont crash
         self.context.wait.until(
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
         return self.context.driver.find_element_by_xpath('//button[text()="Create room"]')
@@ -88,8 +88,6 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_xpath('//*[@class="hc-glance clickable"]')
 
     def click_add_member(self):
-        # TODO replace import in the top of page
-        import time
         time.sleep(3)
         self.context.driver.find_element_by_id('room-actions-btn').click()
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[text()="Invite People"]')))
@@ -98,13 +96,13 @@ class LobbyPage(Page):
     def send_invite(self):
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_invite-users-people')))
         self.context.driver.find_element_by_css_selector('#s2id_invite-users-people').click()
+        # TODO Liquidate the dependencies on 'ivansavarin test' asap
         self.context.driver.find_element_by_xpath(
             '//div[contains(@class,"select2-drop")]//div[text()="ivan savarin test"]').click()
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[text() = "Invite people"]')))
 
     def find_invite(self):
-        # TODO if it possible - replace longtail search
-        return self.context.driver.find_element_by_xpath('//*[@id="invite-users-dialog"]/footer/div[1]/button[1]')
+        return self.context.driver.find_element_by_xpath('//button[text()="Invite people"]')
 
     def invite(self):
         self.find_invite().click()
@@ -148,7 +146,7 @@ class LobbyPage(Page):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
         self.find_input_field().send_keys('/clear')
         self.find_input_field().send_keys(Keys.ENTER)
-
+        # TODO Liquidate the dependencies on 'HenaYamkoviy' and @gtest asap
         self.find_input_field().send_keys('/alias set @gtest @HenaYamkoviy')
         self.find_input_field().send_keys(Keys.ENTER)
         self.find_input_field().send_keys(Keys.ENTER)
@@ -162,10 +160,12 @@ class LobbyPage(Page):
         return self.context.driver.find_elements_by_css_selector('.notification.msg-line')
 
     def get_text_from_alias_bot(self):
-        # TODO Change "n" variable to more informative
-        for n in self.find_input_alias():
-            print(n.text)
-            for word in n.text.split():
+        for data in self.find_input_alias():
+            # TODO Is the print important here ?
+            print(data.text)
+            for word in data.text.split():
+                # TODO Maybe try to replace @gtest to some variable ? Seems like it is depended
+                # TODO Liquidate the dependencies on '@gtest' asap
                 if '@gtest' in word:
                     return True
 
@@ -218,15 +218,14 @@ class LobbyPage(Page):
             self.input_data_in_alias_name_form()
 
     def input_data_in_alias_form(self):
-        # TODO What form?
         self.find_alias_form().send_keys("@test")
 
     def find_alias_form(self):
-        # TODO What form?
         self.context.wait.until(EC.presence_of_element_located((By.NAME, 'alias')))
         return self.context.driver.find_element_by_name('alias')
 
     def input_data_in_alias_name_form(self):
+        # TODO Liquidate the dependencies on 'HenaYamkoviy' asap
         self.find_form_name().send_keys('HenaYamkoviy')
         self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="HenaYamkoviy"]')))
         self.adding_data()
@@ -248,6 +247,7 @@ class LobbyPage(Page):
 
         result = False
         for element in table:
+            # TODO Liquidate the dependencies on 'HenaYamkoviy' asap
             if element.text == "@HenaYamkoviy":
                 result = True
         return result
