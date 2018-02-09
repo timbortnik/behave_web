@@ -22,6 +22,7 @@ class AuthorizedPage(Page):
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
     def find_enter_btn(self):
+        # TODO change longtail search if it possible
         return self.context.driver.find_element_by_xpath('//*[@id="content"]/div/div/div/div[1]/div/a')
 
     def switch_to_people(self):

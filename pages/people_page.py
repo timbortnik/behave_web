@@ -13,8 +13,10 @@ class PeoplePage(Page):
 
     def show_admins_only(self):
         self.context.driver.find_element_by_id('show_admins_only').click()
+        # TODO maybe we can find more automatisation way to get admins name
         admin = self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//a[contains(text(), "Tim Bortnik")]')))
         if admin:
+            # TODO remove print's, we need to make test which fails or not fails
             print('\tAdmins found correctly')
             pass
         else:

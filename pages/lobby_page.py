@@ -16,22 +16,28 @@ class LobbyPage(Page):
     url = '/chat/lobby'
 
     def open_rooms_list(self):
+        # TODO variable "i" looks poor, please provide some description
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
         for i in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
             if i.text == 'Rooms':
                 i.click()
 
     def open_room_by_name(self,name):
+        # TODO variable "i" looks poor, please provide some description
         for i in self.context.driver.find_elements_by_css_selector('.hc-lobby-list-names span.groupchat'):
             if i.text == name:
                 i.click()
                 break
+                # TODO I think you should try to replace "try" function, if it possible
+                # TODO We don't find where you using this function, please provide us, or remove it
         try:
             self.context.wait.until(lambda driver: driver.find_element_by_class_name('hc-chat-msg'))
         except TimeoutException:
             pass
 
     def room_send_msg(self, msg):
+        # TODO this(msg_field) variable should be in separated method
+        # TODO and make method name more informative
         msg_field = self.context.driver.find_element_by_id('hc-message-input')
         if msg == '/clear':
             msg_field.send_keys('/clear')
@@ -42,6 +48,7 @@ class LobbyPage(Page):
             msg_field.send_keys(msg+Keys.RETURN)
 
     def check_is_ping(self, msg):
+        # TODO if it possible, replace this waits for EC
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.msg-line.msg-line div.msg-line'))
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.notification.msg-line'))
         msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
@@ -68,6 +75,7 @@ class LobbyPage(Page):
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
 
     def find_create_btn(self):
+        # TODO This function same with find_btn(line 64)
         self.context.wait.until(
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
         return self.context.driver.find_element_by_xpath('//button[text()="Create room"]')
@@ -80,6 +88,7 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_xpath('//*[@class="hc-glance clickable"]')
 
     def click_add_member(self):
+        # TODO replace import in the top of page
         import time
         time.sleep(3)
         self.context.driver.find_element_by_id('room-actions-btn').click()
@@ -94,6 +103,7 @@ class LobbyPage(Page):
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[text() = "Invite people"]')))
 
     def find_invite(self):
+        # TODO if it possible - replace longtail search
         return self.context.driver.find_element_by_xpath('//*[@id="invite-users-dialog"]/footer/div[1]/button[1]')
 
     def invite(self):
@@ -152,6 +162,7 @@ class LobbyPage(Page):
         return self.context.driver.find_elements_by_css_selector('.notification.msg-line')
 
     def get_text_from_alias_bot(self):
+        # TODO Change "n" variable to more informative
         for n in self.find_input_alias():
             print(n.text)
             for word in n.text.split():
@@ -163,6 +174,7 @@ class LobbyPage(Page):
         return self.get_text_from_alias_bot()
 
     def random_click(self):
+        # TODO This method time after time fails in CI
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
         self.find_element_for_random_click().click()
 
@@ -195,6 +207,7 @@ class LobbyPage(Page):
         return self.context.wait.until(EC.frame_to_be_available_and_switch_to_it((By.CLASS_NAME, 'hc-addon-iframe')))
 
     def open_config(self):
+        # TODO What's config?
         self.context.wait.until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, 'div>div>.aui-button.aui-button-link')))
         self.context.driver.find_element_by_css_selector('div>div>.aui-button.aui-button-link').click()
@@ -205,9 +218,11 @@ class LobbyPage(Page):
             self.input_data_in_alias_name_form()
 
     def input_data_in_alias_form(self):
+        # TODO What form?
         self.find_alias_form().send_keys("@test")
 
     def find_alias_form(self):
+        # TODO What form?
         self.context.wait.until(EC.presence_of_element_located((By.NAME, 'alias')))
         return self.context.driver.find_element_by_name('alias')
 
@@ -217,6 +232,7 @@ class LobbyPage(Page):
         self.adding_data()
 
     def adding_data(self):
+        # TODO Where?
         self.find_form_name().send_keys(Keys.ARROW_DOWN)
         self.find_form_name().send_keys(Keys.ARROW_DOWN)
         self.find_form_name().send_keys(Keys.ENTER)
@@ -237,6 +253,7 @@ class LobbyPage(Page):
         return result
 
     def delete_ico(self):
+        # TODO add more informative name of method
         self.context.wait.until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, "a.aui-icon.aui-icon-small.aui-iconfont-delete.delete")))
         return self.context.driver.find_elements_by_css_selector('a.aui-icon.aui-icon-small.aui-iconfont-delete.delete')
