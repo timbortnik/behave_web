@@ -1,18 +1,11 @@
 from behave import when, then
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
-# from helpers.icon_in_div_changed import LobbyPageIconInDivChanged
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
 
-#FULL_NAME = None
 driver = webdriver.Chrome
-
-#
-# def change_full_name(name):
-#     global FULL_NAME
-#     FULL_NAME = name
 
 
 @when('we get full user name from settings')

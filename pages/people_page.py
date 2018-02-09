@@ -2,7 +2,6 @@ from selenium.webdriver.common.keys import Keys
 from .base_page import Page
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-# import features.steps.step_checking_status as cs
 import random
 import string
 

@@ -1,5 +1,4 @@
 from behave import when, then
-# import features.steps.step_checking_status as cs
 
 
 @when("we compare name of current user with name on Welcome title")
