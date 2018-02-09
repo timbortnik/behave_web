@@ -27,6 +27,7 @@ class SettingsPage(Page):
 
     @staticmethod
     def check_if_exist(*args):
+        # TODO replace "i" variable to more informative name
         for i in args:
             if len(i) == 0:
                 return False
