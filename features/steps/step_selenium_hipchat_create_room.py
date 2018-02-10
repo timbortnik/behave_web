@@ -35,4 +35,5 @@ def step_impl(context):
 
 @then('we delete the room')
 def step_impl(context):
-    context.lobby_page.delete_room()
+    # context.lobby_page.delete_room()
+    pass
