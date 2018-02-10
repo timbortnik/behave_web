@@ -48,7 +48,7 @@ class LobbyPage(Page):
             LobbyPage.find_msg_field(self).send_keys(msg+Keys.RETURN)
 
     def check_is_ping(self, msg):
-        # TODO if it possible, replace this waits for EC
+        # TODO if it possible, replace this waits for EC.
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.msg-line.msg-line div.msg-line'))
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.notification.msg-line'))
         msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
