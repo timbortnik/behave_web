@@ -18,22 +18,23 @@ class LobbyPage(Page):
 
     def open_rooms_list(self):
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        for element in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
+            if element.text == 'Rooms':
+                element.click()
+
+    def open_room_by_name(self, name):
+        for room in self.context.driver.find_elements_by_css_selector('.hc-lobby-list-names span.groupchat'):
+            if room.text == name:
+                room.click()
+                break
+        try:
+            self.context.wait.until(lambda driver: driver.find_element_by_class_name('hc-chat-msg'))
+        except TimeoutException:
+            pass
+
         for i in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
             if i.text == 'Rooms':
                 i.click()
-
-    def open_room_by_name(self, name):
-        if name == 'Pingbot room':
-            self.context.driver.find_element_by_xpath('//span[text()="Pingbot room"]').click()
-        else:
-            for i in self.context.driver.find_elements_by_css_selector('.hc-lobby-list-names span.groupchat'):
-                if i.text == name:
-                    i.click()
-                    break
-            try:
-                self.context.wait.until(lambda driver: driver.find_element_by_class_name('hc-chat-msg'))
-            except TimeoutException:
-                pass
 
     def find_msg_field(self):
         return self.context.driver.find_element_by_id('hc-message-input')

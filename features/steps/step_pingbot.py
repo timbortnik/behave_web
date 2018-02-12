@@ -27,8 +27,5 @@ def step_impl(context):
 
 @then('we receive pingbot reply')
 def step_impl(context):
-    pass
-    #assert context.lobby_page.check_is_ping('223')
     # assert context.lobby_page.check_is_ping('223')
     return True
-
