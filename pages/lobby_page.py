@@ -16,44 +16,31 @@ class LobbyPage(Page):
 
     url = '/chat/lobby'
 
-    def open_rooms_list(self):
+
+    def open_pingbot_room(self):
+        self.context.driver.get(self.context.base_url + "/chat/room/4383277")
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
-        for element in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
-            if element.text == 'Rooms':
-                element.click()
-
-    def open_room_by_name(self, name):
-        for room in self.context.driver.find_elements_by_css_selector('.hc-lobby-list-names span.groupchat'):
-            if room.text == name:
-                room.click()
-                break
-        try:
-            self.context.wait.until(lambda driver: driver.find_element_by_class_name('hc-chat-msg'))
-        except TimeoutException:
-            pass
-
-        for i in self.context.driver.find_elements_by_css_selector('.aui-button-light '):
-            if i.text == 'Rooms':
-                i.click()
 
     def find_msg_field(self):
         return self.context.driver.find_element_by_id('hc-message-input')
 
     def send_msg_in_room(self, msg):
-        if msg == '/clear':
-            LobbyPage.find_msg_field(self).send_keys('/clear')
-            LobbyPage.find_msg_field(self).send_keys(Keys.RETURN)
-            self.context.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'hc-chat-msg')))
-        else:
-            self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
-            LobbyPage.find_msg_field(self).send_keys(msg+Keys.RETURN)
+        if "room" in self.context.driver.current_url:
+            if msg == '/clear':
+                LobbyPage.find_msg_field(self).send_keys('/clear')
+                LobbyPage.find_msg_field(self).send_keys(Keys.RETURN)
+                self.context.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'hc-chat-msg')))
+            else:
+                self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
+                LobbyPage.find_msg_field(self).send_keys(msg+Keys.RETURN)
 
     def check_is_ping(self, msg):
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.msg-line.msg-line div.msg-line'))
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.notification.msg-line'))
         msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
-        ment_names = msgs[len(msgs)-1].find_element_by_xpath('//div[@class="notification msg-line"]').text
-        return msg == msgs[len(msgs)-1].text[len(ment_names)]#+1:]
+        for msg_from_chat in msgs:
+            if msg in msg_from_chat.text:
+                return True
 
     room_name = str(randint(1, 999))
 
@@ -172,9 +159,9 @@ class LobbyPage(Page):
 
     def random_click(self):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
-        self.find_element_for_random_click().click()
+        self.find_lobby_page_filter().click()
 
-    def find_element_for_random_click(self):
+    def find_lobby_page_filter(self):
         self.context.wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Filter']")))
         return self.context.driver.find_element_by_xpath("//input[@placeholder='Filter']")
 
