@@ -75,7 +75,6 @@ class LobbyPage(Page):
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
 
     def find_create_btn(self):
-        # TODO This function same with find_btn(line 64) // 1st for link that open popup window with button from 2nd . Dont touch or make beeter but dont crash
         self.context.wait.until(
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
         return self.context.driver.find_element_by_xpath('//button[text()="Create room"]')
@@ -96,7 +95,6 @@ class LobbyPage(Page):
     def send_invite(self):
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_invite-users-people')))
         self.context.driver.find_element_by_css_selector('#s2id_invite-users-people').click()
-        # TODO Liquidate the dependencies on 'ivansavarin test' asap
         self.context.driver.find_element_by_xpath(
             '//div[contains(@class,"select2-drop")]//div[text()="ivan savarin test"]').click()
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[text() = "Invite people"]')))
@@ -144,10 +142,12 @@ class LobbyPage(Page):
 
     def input_comands_in_field(self):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
+        self.context.wait.until(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, ".hc-chat-row.hc-msg-nocolor.hc-msg-message.hc-classic-neue")))
         self.find_input_field().send_keys('/clear')
         self.find_input_field().send_keys(Keys.ENTER)
-        # TODO Liquidate the dependencies on 'HenaYamkoviy' and @gtest asap
-        self.find_input_field().send_keys('/alias set @gtest @HenaYamkoviy')
+        alias_set_string = '/alias set ' + self.context.test_name + ' @TestHenaYamkoviy'
+        self.find_input_field().send_keys(alias_set_string)
         self.find_input_field().send_keys(Keys.ENTER)
         self.find_input_field().send_keys(Keys.ENTER)
 
@@ -161,12 +161,8 @@ class LobbyPage(Page):
 
     def get_text_from_alias_bot(self):
         for data in self.find_input_alias():
-            # TODO Is the print important here ?
-            print(data.text)
             for word in data.text.split():
-                # TODO Maybe try to replace @gtest to some variable ? Seems like it is depended
-                # TODO Liquidate the dependencies on '@gtest' asap
-                if '@gtest' in word:
+                if self.context.test_name in word:
                     return True
 
     def chat_adding_alias(self):
@@ -174,7 +170,6 @@ class LobbyPage(Page):
         return self.get_text_from_alias_bot()
 
     def random_click(self):
-        # TODO This method time after time fails in CI
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
         self.find_element_for_random_click().click()
 
@@ -206,14 +201,13 @@ class LobbyPage(Page):
         time.sleep(3)
         return self.context.wait.until(EC.frame_to_be_available_and_switch_to_it((By.CLASS_NAME, 'hc-addon-iframe')))
 
-    def open_config(self):
-        # TODO What's config?
+    def open_alias_config(self):
         self.context.wait.until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, 'div>div>.aui-button.aui-button-link')))
         self.context.driver.find_element_by_css_selector('div>div>.aui-button.aui-button-link').click()
 
     def put_data_into_the_frame(self):
-            self.open_config()
+            self.open_alias_config()
             self.input_data_in_alias_form()
             self.input_data_in_alias_name_form()
 
@@ -225,13 +219,11 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_name('alias')
 
     def input_data_in_alias_name_form(self):
-        # TODO Liquidate the dependencies on 'HenaYamkoviy' asap
-        self.find_form_name().send_keys('HenaYamkoviy')
-        self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="HenaYamkoviy"]')))
-        self.adding_data()
+        self.find_form_name().send_keys('TestHenaYamkoviy')
+        self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="TestHenaYamkoviy"]')))
+        self.adding_data_in_alias_name_from()
 
-    def adding_data(self):
-        # TODO Where?
+    def adding_data_in_alias_name_from(self):
         self.find_form_name().send_keys(Keys.ARROW_DOWN)
         self.find_form_name().send_keys(Keys.ARROW_DOWN)
         self.find_form_name().send_keys(Keys.ENTER)
@@ -247,17 +239,15 @@ class LobbyPage(Page):
 
         result = False
         for element in table:
-            # TODO Liquidate the dependencies on 'HenaYamkoviy' asap
-            if element.text == "@HenaYamkoviy":
+            if element.text == "@TestHenaYamkoviy":
                 result = True
         return result
 
-    def delete_ico(self):
-        # TODO add more informative name of method
+    def alias_delete_icon(self):
         self.context.wait.until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, "a.aui-icon.aui-icon-small.aui-iconfont-delete.delete")))
         return self.context.driver.find_elements_by_css_selector('a.aui-icon.aui-icon-small.aui-iconfont-delete.delete')
 
-    def click_delete_ico(self):
-        for delete in self.delete_ico():
+    def click_alias_delete_icon(self):
+        for delete in self.alias_delete_icon():
             delete.click()

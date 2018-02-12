@@ -23,4 +23,4 @@ def step_impl(context):
     context.lobby_page.focus_at_alias_config_window()
     context.lobby_page.put_data_into_the_frame()
     assert context.lobby_page.find_added_element()
-    context.lobby_page.click_delete_ico()
+    context.lobby_page.click_alias_delete_icon()
