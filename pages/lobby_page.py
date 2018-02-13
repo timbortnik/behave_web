@@ -115,6 +115,7 @@ class LobbyPage(Page):
         self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
         self.room_actions_button().click()
+        self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.delete-room-action')))
         self.context.driver.find_element_by_css_selector('.delete-room-action').click()
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//button[text()="Delete room"]')))
         self.context.driver.find_element_by_xpath('//button[text()="Delete room"]').click()
