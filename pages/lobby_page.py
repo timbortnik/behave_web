@@ -214,9 +214,9 @@ class LobbyPage(Page):
     def input_data_in_alias_name_form(self):
         self.find_form_name().send_keys('TestHenaYamkoviy')
         self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="TestHenaYamkoviy"]')))
-        self.adding_data_in_alias_name_from()
+        self.adding_data_in_alias_name_form()
 
-    def adding_data_in_alias_name_from(self):
+    def adding_data_in_alias_name_form(self):
         self.find_form_name().send_keys(Keys.ARROW_DOWN)
         self.find_form_name().send_keys(Keys.ARROW_DOWN)
         self.find_form_name().send_keys(Keys.ENTER)
