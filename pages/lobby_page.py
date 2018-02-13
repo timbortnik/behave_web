@@ -14,20 +14,24 @@ class LobbyPage(Page):
     """
 
     url = '/chat/lobby'
+    driver = webdriver.Chrome
+    user_div = ''
+    status_str = ''
     status_shortcuts = {'available': 'icon-avail',
                         'away': 'icon-xa',
                         'do not disturb': 'icon-dnd'}
 
     class lobby_icon_changed(object):
-        def __init__(self, lobby_page, div, icon_status):
-            self.div = div
+        def __init__(self, lobby_page, icon_status):
+            #self.div = div
             self.icon_status = icon_status
             self.lobby_page = lobby_page
 
         def __call__(self, *args, **kwargs):
-            element = self.lobby_page.find_ico_in_div(self.div)
+            element = self.lobby_page.find_ico_in_div(self.lobby_page.user_div)
             icon_str = str(element.get_attribute('xlink:href'))
             if self.icon_status not in icon_str:
+                self.lobby_page.status_str = icon_str
                 return icon_str
             else:
                 return False
@@ -287,8 +291,9 @@ class LobbyPage(Page):
         divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
         for div in divs:
             if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
-                return div
-        return False
+                self.user_div = div
+                #return div
+        #return False
 
     def find_ico_in_div(self, div):
         return div.find_element_by_css_selector(
