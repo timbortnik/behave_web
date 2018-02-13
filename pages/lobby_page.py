@@ -159,6 +159,7 @@ class LobbyPage(Page):
         self.find_lobby_page_filter().click()
 
     def find_lobby_page_filter(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".aui-page-header")))
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Filter']")))
         return self.context.driver.find_element_by_xpath("//input[@placeholder='Filter']")
 
