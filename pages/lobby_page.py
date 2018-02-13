@@ -250,7 +250,6 @@ class LobbyPage(Page):
         for add_email_try in range(0, 3):
             email = 'test' + str(randint(0, 999)) + '@send22u.info'
             self.context.driver.find_element_by_id('email_input').send_keys(email, Keys.ENTER)
-            self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//td[text()="' + email + '"]')))
 
     def delete_email_from_list(self):
         delete_buttons = self.context.driver.find_elements_by_xpath('//a[text()="Remove"]')
