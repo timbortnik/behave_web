@@ -29,7 +29,7 @@ class SearchPage(Page):
     def user_name(self):
         return AuthorizedPage.label_page_head(self).text
 
-    def input_correct_data(self): #input data in middle form
+    def input_correct_data_in_middle_form(self):
         self.find_search_middle_form().clear()
         self.find_search_middle_form().send_keys(self.user_name().split()[1])
         self.find_search_middle_form().send_keys(Keys.ENTER)

@@ -104,15 +104,17 @@ class LobbyPage(Page):
     def invite(self):
         self.find_invite().click()
 
-    def accept_invite(self):
+    def open_created_room(self):
         self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+
+    def accept_invite(self):
+        self.open_created_room()
         self.context.driver.find_element_by_id('hc-message-input').send_keys('@all', Keys.RETURN, Keys.RETURN)
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="msg-line"]')))
 
     def delete_room(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
-        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        self.open_created_room()
         self.room_actions_button().click()
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.delete-room-action')))
         self.context.driver.find_element_by_css_selector('.delete-room-action').click()
@@ -120,12 +122,10 @@ class LobbyPage(Page):
         self.context.driver.find_element_by_xpath('//button[text()="Delete room"]').click()
         # This sleep we need after deleting, because browser should send data about action to back-end
         time.sleep(1)
-        self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
-        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        self.open_created_room()
         self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.hc-message.hc-message-warning.warning.closeable')))
         if self.context.driver.find_element_by_css_selector(".hc-message.hc-message-warning.warning.closeable"):
             return True
-
 
     def open_alias_room(self):
         self.find_alias_room().click()
