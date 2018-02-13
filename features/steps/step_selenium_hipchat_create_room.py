@@ -36,4 +36,3 @@ def step_impl(context):
 def step_impl(context):
     context.lobby_page.delete_room()
 
-
