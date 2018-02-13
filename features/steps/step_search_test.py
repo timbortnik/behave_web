@@ -24,7 +24,7 @@ def step_impl(context):
 
 @when('we input correct data in middle search')
 def step_impl(context):
-    context.search_page.input_correct_data()
+    context.search_page.input_correct_data_in_middle_form()
 
 
 @then('we check search answer')
