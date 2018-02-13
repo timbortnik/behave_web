@@ -22,8 +22,13 @@ class AuthorizedPage(Page):
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
     def find_enter_btn(self):
-        return self.context.driver.find_element_by_xpath('//*[@id="content"]/div/div/div/div[1]/div/a')
+        return self.context.driver.find_element_by_xpath('//a[text()="Launch the web app"]')
 
     def switch_to_people(self):
         self.context.driver.find_element_by_xpath('//a[text()="People"]').click()
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//h2[text()="People"]')))
+
+    def switch_to_emoticons(self):
+        self.context.driver.find_element_by_xpath('//a[text()="Emoticons"]').click()
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'drop')))
+
