@@ -71,7 +71,7 @@ class LobbyPage(Page):
 
     def click_create_room(self):
         self.find_create_btn().click()
-        self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@class="hc-glance clickable"]')))
+        self.context.wait.until_not(EC.element_to_be_clickable((By.XPATH, '//*[@class="aui-dialog2-header-main"]')))
 
     def get_room_url(self):
         global room_url
