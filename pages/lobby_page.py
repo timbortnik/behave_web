@@ -8,14 +8,12 @@ from random import choice
 import time
 
 
-
 class LobbyPage(Page):
     """
     Chat page
     """
 
     url = '/chat/lobby'
-
 
     def open_pingbot_room(self):
         self.context.driver.get(self.context.base_url + "/chat/room/4383277")
@@ -55,7 +53,7 @@ class LobbyPage(Page):
         self.context.wait.until_not(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, '.hc-message.hc-message-success.success.closeable')))
         self.context.wait.until(
-            EC.visibility_of_element_located((By.ID, 'create-room-button')))
+            EC.element_to_be_clickable((By.ID, 'create-room-button')))
         return self.context.driver.find_element_by_id('create-room-button')
 
     def find_set_name(self):
@@ -76,10 +74,10 @@ class LobbyPage(Page):
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@class="hc-glance clickable"]')))
 
     def get_room_url(self):
-        global url
+        global room_url
         self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".hc-page-header-topic")))
-        url = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
-        return url
+        room_url = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
+        return room_url
 
     def find_add_member(self):
         return self.context.driver.find_element_by_xpath('//*[@class="hc-glance clickable"]')
@@ -108,13 +106,13 @@ class LobbyPage(Page):
         self.find_invite().click()
 
     def accept_invite(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/" + url)
+        self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
         self.context.driver.find_element_by_id('hc-message-input').send_keys('@all', Keys.RETURN, Keys.RETURN)
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="msg-line"]')))
 
     def delete_room(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/" + url)
+        self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
         self.room_actions_button().click()
         self.context.driver.find_element_by_css_selector('.delete-room-action').click()
@@ -148,7 +146,6 @@ class LobbyPage(Page):
 
     def get_text_from_alias_bot(self):
         for data in self.find_input_alias():
-            print(data.text)
             for word in data.text.split():
                 if '@gtest' in word:
                     return True
@@ -162,7 +159,7 @@ class LobbyPage(Page):
         self.find_lobby_page_filter().click()
 
     def find_lobby_page_filter(self):
-        self.context.wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Filter']")))
+        self.context.wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Filter']")))
         return self.context.driver.find_element_by_xpath("//input[@placeholder='Filter']")
 
     def open_alias_menu(self):
