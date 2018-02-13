@@ -30,7 +30,7 @@ import selenium.webdriver.support.ui as ui
 import datetime
 import time
 from pages.emoticons_page import EmoticonsPage
-
+from helpers.api_requests import ApiRequest
 
 def get_date_time():
     dt_format = '%Y%m%d_%H%M%S'
@@ -55,6 +55,7 @@ def before_all(context):
     context.search_page = SearchPage(context)
     context.people_page = PeoplePage(context)
     context.test_name = "@gtest"
+    context.api = ApiRequest
 
 
 def after_scenario(context, scenario):
@@ -63,6 +64,18 @@ def after_scenario(context, scenario):
         file = open('scenario_result/'+scenario.name+get_date_time()+'.html', 'w')
         file.write(context.driver.page_source)
         file.close()
+
+
+def after_feature(context, feature):
+    if feature.name == "Entering the app, creating mate, relogin, accept, deleting":
+        if feature.status == "failed":
+            context.api_page.navigate()
+            context.login_page.enter_pass(context.hipchat_pass)
+            context.settings_page.api_submit()
+            token = context.api_page.room_manage_token()
+            context.lobby_page.open_created_room()
+            room = context.lobby_page.get_room_url()
+            context.api.delete_room(self=context.api, room=room, token=token)
 
 
 def after_all(context):
