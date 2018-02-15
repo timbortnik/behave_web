@@ -83,6 +83,8 @@ class LobbyPage(Page):
 
     def room_actions_button(self):
         self.context.wait.until_not(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, '.closeable')))
+        self.context.wait.until_not(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, '.hc-message.hc-message-success.success.closeable')))
         return self.context.driver.find_element_by_id('room-actions-btn')
 
@@ -120,7 +122,7 @@ class LobbyPage(Page):
         self.context.driver.find_element_by_css_selector('.delete-room-action').click()
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//button[text()="Delete room"]')))
         self.context.driver.find_element_by_xpath('//button[text()="Delete room"]').click()
-        # This sleep we need after deleting, because browser should send data about action to back-end
+        # # This sleep we need after deleting, because browser should send data about action to back-end
         time.sleep(1)
         self.open_created_room()
         self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.hc-message.hc-message-warning.warning.closeable')))
