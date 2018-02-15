@@ -58,23 +58,25 @@ def before_all(context):
     context.api = ApiRequest
 
 
+def before_scenario(context, scenario):
+    if scenario.name == "Relogin to 1st acc and delete room":
+        context.api_page.navigate()
+        context.login_page.enter_pass(context.hipchat_pass)
+        context.settings_page.api_submit()
+        assert context.api_page.token("Manage Rooms")
+
+
 def after_scenario(context, scenario):
     if scenario.status == "failed":
         context.driver.save_screenshot('scenario_result/'+scenario.name + get_date_time() + "_failed.png")
         file = open('scenario_result/'+scenario.name+get_date_time()+'.html', 'w')
         file.write(context.driver.page_source)
         file.close()
-
-
-def after_feature(context, feature):
-    if feature.name == "Entering the app, creating mate, relogin, accept, deleting":
-        if feature.status == "failed":
-            context.api_page.navigate()
-            context.login_page.enter_pass(context.hipchat_pass)
-            context.settings_page.api_submit()
-            token = context.api_page.room_manage_token()
+    if scenario.name == "Relogin to 1st acc and delete room":
+        if scenario.status == "failed":
             context.lobby_page.open_created_room()
             room = context.lobby_page.get_room_url()
+            token = context.api_page.token("Manage Rooms")
             context.api.delete_room(self=context.api, room=room, token=token)
 
 
