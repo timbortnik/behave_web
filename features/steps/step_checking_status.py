@@ -1,6 +1,5 @@
-from behave import when, then
+from behave import then, given
 from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
@@ -8,12 +7,12 @@ from selenium.webdriver.common.by import By
 driver = webdriver.Chrome
 
 
-@when('we get full user name from settings')
+@then('we get full user name from settings')
 def get_full_name(context):
-    context.hipchat_full_name = context.settings_page.full_name()
+     context.hipchat_full_name = context.settings_page.full_name()
 
 
-@when('we are in chat window')
+@given('we are in chat window')
 def step_impl1(context):
     context.lobby_page.navigate()
 
@@ -24,9 +23,9 @@ def stat_away(context):
     context.lobby_page.click_dropdown()
     context.wait.until(ec.presence_of_element_located((By.ID, context.lobby_page.status_shortcuts['away'])))
     context.lobby_page.click_away()
-    #wait = WebDriverWait(driver, 10)
     context.lobby_page.find_element_by_username(context.hipchat_full_name)
-    context.wait.until(context.lobby_page.lobby_icon_changed(context.lobby_page, context.lobby_page.status_shortcuts['available']))
+    context.wait.until(context.lobby_page.LobbyIconChanged(
+        context.lobby_page, context.lobby_page.status_shortcuts['available']))
     assert context.lobby_page.status_shortcuts['away'] in context.lobby_page.status_str
 
 
@@ -35,9 +34,9 @@ def stat_dnd(context):
     context.lobby_page.click_dropdown()
     context.wait.until(ec.presence_of_element_located((By.ID, context.lobby_page.status_shortcuts['do not disturb'])))
     context.lobby_page.click_do_not_disturb()
-    #wait = WebDriverWait(driver, 10)
     context.lobby_page.find_element_by_username(context.hipchat_full_name)
-    context.wait.until(context.lobby_page.lobby_icon_changed(context.lobby_page, context.lobby_page.status_shortcuts['away']))
+    context.wait.until(context.lobby_page.LobbyIconChanged(
+        context.lobby_page, context.lobby_page.status_shortcuts['away']))
     assert context.lobby_page.status_shortcuts['do not disturb'] in context.lobby_page.status_str
 
 
@@ -46,7 +45,7 @@ def stat_available(context):
     context.lobby_page.click_dropdown()
     context.wait.until(ec.presence_of_element_located((By.ID, context.lobby_page.status_shortcuts['away'])))
     context.lobby_page.click_available()
-    #wait = WebDriverWait(driver, 10)
     context.lobby_page.find_element_by_username(context.hipchat_full_name)
-    context.wait.until(context.lobby_page.lobby_icon_changed(context.lobby_page, context.lobby_page.status_shortcuts['do not disturb']))
+    context.wait.until(context.lobby_page.LobbyIconChanged(
+        context.lobby_page, context.lobby_page.status_shortcuts['do not disturb']))
     assert context.lobby_page.status_shortcuts['available'] in context.lobby_page.status_str

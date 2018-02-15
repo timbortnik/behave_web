@@ -21,9 +21,8 @@ class LobbyPage(Page):
                         'away': 'icon-xa',
                         'do not disturb': 'icon-dnd'}
 
-    class lobby_icon_changed(object):
+    class LobbyIconChanged(object):
         def __init__(self, lobby_page, icon_status):
-            #self.div = div
             self.icon_status = icon_status
             self.lobby_page = lobby_page
 
@@ -205,7 +204,7 @@ class LobbyPage(Page):
         self.find_button_in_dropdown_menu().click()
 
     def find_button_in_dropdown_menu(self):
-        self.context.wait.until(EC.presence_of_element_located((By.XPATH, ('//a[@data-addon_key="hc-alias"]'))))
+        self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//a[@data-addon_key="hc-alias"]')))
         return self.context.driver.find_element_by_xpath('//a[@data-addon_key="hc-alias"]')
 
     def focus_at_alias_config_window(self):
@@ -292,8 +291,6 @@ class LobbyPage(Page):
         for div in divs:
             if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
                 self.user_div = div
-                #return div
-        #return False
 
     def find_ico_in_div(self, div):
         return div.find_element_by_css_selector(

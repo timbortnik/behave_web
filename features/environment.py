@@ -55,8 +55,8 @@ def before_all(context):
 
 def after_scenario(context, scenario):
     if scenario.status == "failed":
-        context.driver.save_screenshot('scenario_result/'+scenario.name + get_date_time() + "_failed.png")
-        file = open('scenario_result/'+scenario.name+get_date_time()+'.html', 'w')
+        context.driver.save_screenshot('scenario_result/' + scenario.name + get_date_time() + "_failed.png")
+        file = open('scenario_result/' + scenario.name + get_date_time() + '.html', 'w')
         file.write(context.driver.page_source)
         file.close()
 

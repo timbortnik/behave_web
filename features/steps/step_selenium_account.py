@@ -4,10 +4,10 @@
 # ----------------------------------------------------------------------------
 # STEPS:
 # ----------------------------------------------------------------------------
-from behave import given, then
+from behave import then, step
 
 
-@given('we are on Account settings Page')
+@step('we are on Account settings Page')
 def step_impl(context):
     context.settings_page.navigate()
 
