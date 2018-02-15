@@ -11,6 +11,35 @@ class ApiPage(Page):
 
     url = '/account/api'
 
+    def token_lable(self):
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'label')))
+        return self.context.driver.find_element_by_id('label')
+
+    def create_button(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'create')))
+        return self.context.driver.find_element_by_id('create')
+
+    def create_token_by_scopes(self, scopes):
+        self.token_lable().send_keys(scopes)
+        self.context.driver.find_element_by_xpath("//option[text()='{0}']".format(scopes)).click()
+        self.create_button().click()
+
+    def token(self, scopes):
+        token_row_number = 0
+        list_of_scope = []
+        for scope in self.context.driver.find_elements_by_xpath('//tr//td[@class="scopes"]'):
+            token_row_number += 1
+            list_of_scope.append(scope)
+            if scope.text == scopes:
+                token = self.context.driver.find_element_by_xpath(
+                    ('//tr[{0}]//td[@class="token"]'.format(token_row_number)))
+                return token.text
+        if scopes not in list_of_scope:
+            self.create_token_by_scopes(scopes)
+            token = self.context.driver.find_element_by_xpath('//tr[{0}]//td[@class="token"]'.format((token_row_number)+1))
+            return token.text
+
+
     def create_new_token(self):
         self.context.driver.find_element_by_id('label').click()
         self.context.driver.find_element_by_id('label').send_keys('test')
@@ -22,16 +51,15 @@ class ApiPage(Page):
                 return i.find_element_by_css_selector('td.token').text
 
     def room_manage_token(self):
-        # token = self.context.driver.find_elements_by_xpath('//tr[1]//td[@class="token"]')
-        self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'table.aui')))
-        table = self.context.driver.find_element_by_xpath("//table[@id='tokens']")
-        table_info = table.text.split()
-        for i in table_info:
-            if "Manage" in i:
-                row_num = table_info.index(i)
-                if table_info[row_num + 1] == "Rooms":
-                    token_index = row_num - 2
-                    token = table_info[token_index]
-        return token
+        token_row_number = 0
+        for i in self.context.driver.find_elements_by_xpath('//tr//td[@class="scopes"]'):
+            token_row_number += 1
+            if i.text == 'Manage Rooms':
+                token = self.context.driver.find_element_by_xpath(('//tr[{0}]//td[@class="token"]'.format(token_row_number)))
+                return token.text
+
+
+
+
 
 
