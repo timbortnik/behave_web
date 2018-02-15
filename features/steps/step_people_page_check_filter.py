@@ -23,5 +23,5 @@ def step_impl(context):
 
 @then('we filter data')
 def step_impl(context):
-    context.people_page.we_filter()
-    context.people_page.we_filter_incorrect()
+    context.people_page.we_filter_user_by_name()
+    context.people_page.we_filter_incorrect_data()

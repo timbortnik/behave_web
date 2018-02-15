@@ -54,6 +54,7 @@ def before_all(context):
     context.emoticons_page = EmoticonsPage(context)
     context.search_page = SearchPage(context)
     context.people_page = PeoplePage(context)
+    context.test_name = "@test"
 
 
 def after_scenario(context, scenario):
