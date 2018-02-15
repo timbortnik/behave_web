@@ -13,7 +13,7 @@ def step_impl(context):
 
 @when('we upload a picture')
 def step_impl(context):
-    context.emoticons_page.upload_image()
+    context.emoticons_page.upload_image_emoticon()
 
 
 @when('we click "Add emoticon"')

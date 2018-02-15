@@ -1,4 +1,9 @@
-from behave import when, then
+from behave import when, then, given
+
+
+@given('we are on Lobby Page')
+def step_impl(context):
+    context.lobby_page.navigate()
 
 
 @when('we click Invite your team')
