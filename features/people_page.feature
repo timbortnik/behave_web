@@ -1,3 +1,4 @@
+
 Feature: Checking user name in people room
 
 Background:

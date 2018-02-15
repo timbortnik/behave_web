@@ -263,28 +263,23 @@ class LobbyPage(Page):
             delete.click()
 
     def open_dropdown(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, "status_dropdown")))
         return self.context.driver.find_element_by_id("status_dropdown")
 
     def click_dropdown(self):
         self.open_dropdown().click()
 
     def click_away(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-xa')))
         return self.context.driver.find_element_by_id('hc-xa').click()
 
     def click_do_not_disturb(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-dnd')))
         return self.context.driver.find_element_by_id('hc-dnd').click()
 
     def click_available(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-avail')))
         return self.context.driver.find_element_by_id('hc-avail').click()
-
-    def find_away_user_status(self):
-        return self.context.driver.find_element_by_id('icon-xa-selected')
-
-    def find_do_not_disturb_user_status(self):
-        return self.context.driver.find_element_by_id('icon-dnd-selected')
-
-    def find_available_user_status(self):
-        return self.context.driver.find_element_by_id('icon-available-selected')
 
     def find_element_by_username(self, username):
         divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')

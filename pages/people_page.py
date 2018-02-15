@@ -31,7 +31,8 @@ class PeoplePage(Page):
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))
 
     def open_user_page(self):
-        self.context.driver.find_element_by_xpath('//a[contains(text(), "' + self.context.hipchat_full_name + '")]').click()
+        self.context.driver.find_element_by_xpath(
+            '//a[contains(text(), "' + self.context.hipchat_full_name + '")]').click()
 
     def label_page_head_on_user_page(self):
         return self.context.driver.find_element_by_css_selector("div.aui-item > h2").text
