@@ -7,18 +7,17 @@ import string
 
 
 class PeoplePage(Page):
+
     url = '/people'
-    admins = ['Tim Bortnik']
+    admins = ['Tim Bortnik', 'Yevhenii Udovychenko']
 
     def show_admins_only(self):
         self.context.driver.find_element_by_id('show_admins_only').click()
-        admin = self.context.wait.until(
-            EC.visibility_of_element_located((By.XPATH, '//a[contains(text(), "Tim Bortnik")]')))
-        if admin:
-            print('\tAdmins found correctly')
-            pass
-        else:
-            print("Admins not found")
+        for admin in self.context.driver.find_elements_by_xpath('//a[@class="name"]'):
+            if admin.text in PeoplePage.admins:
+                return True
+            else:
+                raise AssertionError
 
     def show_all_users(self):
         self.context.driver.find_element_by_id('show_all_users').click()
@@ -39,8 +38,13 @@ class PeoplePage(Page):
 
     def we_see_all_users(self):
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))
+        all_users =[]
+        for user in self.context.driver.find_elements_by_xpath('//a[@class="name"]'):
+            all_users.append(user.text)
+        return all_users
 
-    def we_filter(self):
+
+    def we_filter_user_by_name(self):
         correct_data = "ivan"
         self.context.wait.until(EC.visibility_of_element_located((By.ID, 'search_query')))
         form = self.context.driver.find_element_by_id('search_query')
@@ -48,21 +52,20 @@ class PeoplePage(Page):
         if self.context.driver.find_element_by_xpath('//a[contains(text(), "' + correct_data + '")]'):
             self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//span[@title="Clear search"]')))
             self.context.driver.find_element_by_xpath('//span[@title="Clear search"]').click()
-            pass
         else:
-            print("Correct data was not filtered")
+            raise AssertionError
 
-    def we_filter_incorrect(self):
+    def filter_form(self):
+        return self.context.driver.find_element_by_id('search_query')
+
+    def we_filter_incorrect_data(self):
         incorrect_data = ''.join([random.choice(string.ascii_letters) for n in range(10)])
         self.context.wait.until(EC.visibility_of_element_located((By.ID, 'search_query')))
-        form = self.context.driver.find_element_by_id('search_query')
-        form.send_keys(incorrect_data, Keys.RETURN)
+        PeoplePage.filter_form(self).send_keys(incorrect_data, Keys.RETURN)
         try:
             if not self.context.driver.find_element_by_xpath('//a[contains(text(), "' + incorrect_data + '")]'):
                 self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//span[@title="Clear search"]')))
                 self.context.driver.find_element_by_xpath('//span[@title="Clear search"]').click()
-                pass
         except:
-            print("\tData filtered correctly. Incorrect result was not displayed")
             self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//span[@title="Clear search"]')))
             self.context.driver.find_element_by_xpath('//span[@title="Clear search"]').click()

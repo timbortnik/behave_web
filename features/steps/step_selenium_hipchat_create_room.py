@@ -17,6 +17,7 @@ def step_impl(context):
     context.lobby_page.create_room()
     context.lobby_page.set_name()
     context.lobby_page.click_create_room()
+    context.lobby_page.get_room_url()
 
 
 @then('we invite member')
@@ -33,4 +34,5 @@ def step_impl(context):
 
 @then('we delete the room')
 def step_impl(context):
-    context.lobby_page.delete_room()
+    assert context.lobby_page.delete_room()
+
