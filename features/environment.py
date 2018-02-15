@@ -59,11 +59,12 @@ def before_all(context):
 
 
 def before_scenario(context, scenario):
-    if scenario.name == "Relogin to 1st acc and delete room":
-        context.api_page.navigate()
-        context.login_page.enter_pass(context.hipchat_pass)
-        context.settings_page.api_submit()
-        assert context.api_page.token("Manage Rooms")
+    # if scenario.name == "Relogin to 1st acc and delete room":
+    #     context.api_page.navigate()
+    #     context.login_page.enter_pass(context.hipchat_pass)
+    #     context.settings_page.api_submit()
+    #     assert context.api_page.token("Manage Rooms")
+    pass
 
 
 def after_scenario(context, scenario):
