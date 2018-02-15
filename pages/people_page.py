@@ -7,13 +7,13 @@ import string
 
 
 class PeoplePage(Page):
+
     url = '/people'
     admins = ['Tim Bortnik']
 
     def show_admins_only(self):
         self.context.driver.find_element_by_id('show_admins_only').click()
-        admin = self.context.wait.until(
-            EC.visibility_of_element_located((By.XPATH, '//a[contains(text(), "Tim Bortnik")]')))
+        admin = self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//a[contains(text(), "Tim Bortnik")]')))
         if admin:
             print('\tAdmins found correctly')
             pass

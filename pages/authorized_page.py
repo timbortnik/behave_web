@@ -28,3 +28,8 @@ class AuthorizedPage(Page):
     def switch_to_people(self):
         self.context.driver.find_element_by_xpath('//a[text()="People"]').click()
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//h2[text()="People"]')))
+
+    def switch_to_emoticons(self):
+        self.context.driver.find_element_by_xpath('//a[text()="Emoticons"]').click()
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'drop')))
+
