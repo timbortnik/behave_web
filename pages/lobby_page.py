@@ -63,7 +63,7 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_id('create-room-button')
 
     def find_set_name(self):
-        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'create-room-name')))
+        self.context.wait.until(EC.presence_of_element_located((By.ID, 'create-room-name')))
         return self.context.driver.find_element_by_id('create-room-name')
 
     def set_name(self):
