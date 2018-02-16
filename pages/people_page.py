@@ -24,13 +24,6 @@ class PeoplePage(Page):
 
     def show_all_users(self):
         self.context.driver.find_element_by_id('show_all_users').click()
-        self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))
-        users = self.context.driver.find_elements_by_xpath('//a[@class="name"]')
-        all_users = users.split()
-        print(all_users)
-
-    def we_see(self):
-        self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))
 
     def open_user_page(self):
         self.context.driver.find_element_by_xpath(
@@ -45,7 +38,6 @@ class PeoplePage(Page):
         for user in self.context.driver.find_elements_by_xpath('//a[@class="name"]'):
             all_users.append(user.text)
         return all_users
-
 
     def we_filter_user_by_name(self):
         correct_data = "ivan"
