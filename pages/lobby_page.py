@@ -63,10 +63,11 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_id('create-room-button')
 
     def find_set_name(self):
-        self.context.wait.until(EC.presence_of_element_located((By.ID, 'create-room-name')))
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'create-room-name')))
         return self.context.driver.find_element_by_id('create-room-name')
 
     def set_name(self):
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'create-room-name')))
         self.find_set_name().send_keys(LobbyPage.room_name)
         self.context.wait.until(
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
@@ -86,17 +87,25 @@ class LobbyPage(Page):
         room_url = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
 
     def find_add_member(self):
+        self.context.wait.until_not(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, '.closeable')))
+        self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="hc-glance clickable"]')))
         return self.context.driver.find_element_by_xpath('//*[@class="hc-glance clickable"]')
 
     def room_actions_button(self):
         self.context.wait.until_not(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, '.closeable')))
+        self.context.wait.until_not(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, '.hc-message.hc-message-success.success.closeable')))
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'room-actions-btn')))
         return self.context.driver.find_element_by_id('room-actions-btn')
 
     def click_add_member(self):
-        self.room_actions_button().click()
-        self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@title="Invite People"]')))
-        self.context.driver.find_element_by_xpath('//a[@title="Invite People"]').click()
+        self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.roster-mini-flex-list.roster_mini_container" )))
+        self.context.driver.find_element_by_xpath('//div[@class="roster-mini-flex-list roster_mini_container"]').click()
+        "hc-glance clickable"
+        self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@class="hc-tab-es-invite aui-inline-dialog-trigger"]')))
+        self.context.driver.find_element_by_xpath('//a[@class="hc-tab-es-invite aui-inline-dialog-trigger"]').click()
 
     def send_invite(self):
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_invite-users-people')))
@@ -148,8 +157,6 @@ class LobbyPage(Page):
         self.find_input_field().send_keys(alias_set_string)
         self.find_input_field().send_keys(Keys.ENTER)
         self.find_input_field().send_keys(Keys.ENTER)
-        self.context.wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, ".hc-chat-row.hc-msg-nocolor.hc-msg-message.hc-classic-neue")))
 
     def find_input_field(self):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
@@ -212,6 +219,9 @@ class LobbyPage(Page):
             self.input_data_in_alias_form()
             self.input_data_in_alias_name_form()
 
+    def find_form_name(self):
+        return self.context.driver.find_element(By.CSS_SELECTOR, 'div.Select-input>input')
+
     def input_data_in_alias_form(self):
         self.find_alias_form().send_keys("@test")
 
@@ -220,18 +230,24 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_name('alias')
 
     def input_data_in_alias_name_form(self):
-        self.find_form_name().send_keys('TestHenaYamkoviy')
-        self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="TestHenaYamkoviy"]')))
+        self.find_form_name().send_keys('@TestHenaYamkoviy')
         self.adding_data_in_alias_name_form()
 
-    def adding_data_in_alias_name_form(self):
-        self.find_form_name().send_keys(Keys.ARROW_DOWN)
-        self.find_form_name().send_keys(Keys.ARROW_DOWN)
-        self.find_form_name().send_keys(Keys.ENTER)
-        self.find_form_name().send_keys(Keys.ENTER)
 
-    def find_form_name(self):
-        return self.context.driver.find_element(By.CSS_SELECTOR, 'div.Select-input>input')
+    def adding_data_in_alias_name_form(self):
+        if "TestHenaYamkoviy" not in self.context.driver.find_element_by_css_selector('div.Select-input>div').text:
+            self.find_form_name().send_keys(Keys.ENTER)
+            self.find_form_name().send_keys(Keys.ENTER)
+        else:
+            self.input_data_in_alias_name_form()
+        # self.find_form_name().send_keys(Keys.ARROW_DOWN)
+        # self.find_form_name().send_keys(Keys.ARROW_DOWN)
+        # self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="@TestHenaYamkoviy"]')))
+        # self.find_form_name().send_keys(Keys.ENTER)
+        # self.find_form_name().send_keys(Keys.ENTER)
+
+
+
 
     def find_added_element(self):
         self.context.wait.until(
