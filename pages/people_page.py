@@ -9,6 +9,9 @@ import string
 class PeoplePage(Page):
 
     url = '/people'
+    list_name = []
+    admin_list = []
+    random_letter = ''
     admins = ['Tim Bortnik', 'Yevhenii Udovychenko']
 
     def show_admins_only(self):
@@ -68,3 +71,41 @@ class PeoplePage(Page):
         except:
             self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//span[@title="Clear search"]')))
             self.context.driver.find_element_by_xpath('//span[@title="Clear search"]').click()
+
+    def set_list_name(self):
+        self.list_name = self.create_list_name()
+
+    def label_page(self):
+        return self.context.driver.find_element_by_css_selector("div.aui-item > h2")
+
+    def get_page(self):
+        return self.label_page().text
+
+    def create_admin_list(self):
+        admin_list = []
+        for i in self.list_name:
+            if any("Admin" in i for i in self.list_name):
+                admin_list.append(i.text)
+                print(admin_list)
+        return admin_list
+
+    def create_list_name(self):
+        list_name = []
+        for i in self.context.driver.find_elements_by_css_selector('a.name'):
+            list_name.append(i.text)
+        return list_name
+
+    def create_alphabet(self):
+        alphabet = []
+        for i in self.context.driver.find_elements_by_css_selector('li>a.pagination-item'):
+            alphabet.append(i.text)
+        return alphabet
+
+    def choose_letter(self):
+        self.random_letter = self.create_alphabet()[random.randint(0, len(self.create_alphabet()) - 1)]
+        xpath = "//a[@class='pagination-item'][text()='" + self.random_letter + "']"
+        self.context.driver.find_element_by_xpath(xpath).click()
+
+    def compare_list(self):
+        letter_list = self.create_list_name()
+        return any(item.startswith(self.random_letter) for item in self.list_name) == letter_list
