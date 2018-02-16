@@ -145,11 +145,11 @@ class LobbyPage(Page):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
         self.clear_all_messages()
         alias_set_string = '/alias set ' + self.context.test_name + ' @TestHenaYamkoviy'
-        self.context.wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, ".hc-chat-row.hc-msg-nocolor.hc-msg-message.hc-classic-neue")))
         self.find_input_field().send_keys(alias_set_string)
         self.find_input_field().send_keys(Keys.ENTER)
         self.find_input_field().send_keys(Keys.ENTER)
+        self.context.wait.until(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, ".hc-chat-row.hc-msg-nocolor.hc-msg-message.hc-classic-neue")))
 
     def find_input_field(self):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
