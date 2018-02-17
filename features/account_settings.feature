@@ -1,4 +1,3 @@
-
 Feature: Checking account settings
 
 Background:
@@ -10,3 +9,4 @@ Background:
 Scenario: Check account settings
     Given we are on Account settings Page
     Then we see filled account settings
+

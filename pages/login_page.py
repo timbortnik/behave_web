@@ -3,6 +3,7 @@
 from .base_page import Page
 from selenium.webdriver.common.keys import Keys
 
+
 class LoginPage(Page):
     
     """

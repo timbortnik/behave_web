@@ -19,10 +19,10 @@ before_tag(context, tag), after_tag(context, tag)
 from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
-from pages.people_page import PeoplePage
 from features.environment_secret import HIPCHAT_LOGIN_2, HIPCHAT_PASS_2
 from pages.api_page import ApiPage
 from pages.settings_page import SettingsPage
+from pages.people_page import PeoplePage
 from pages.lobby_page import LobbyPage
 from pages.search_page import SearchPage
 from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
@@ -59,8 +59,8 @@ def before_all(context):
 
 def after_scenario(context, scenario):
     if scenario.status == "failed":
-        context.driver.save_screenshot('scenario_result/'+scenario.name + get_date_time() + "_failed.png")
-        file = open('scenario_result/'+scenario.name+get_date_time()+'.html', 'w')
+        context.driver.save_screenshot('scenario_result/' + scenario.name + get_date_time() + "_failed.png")
+        file = open('scenario_result/' + scenario.name + get_date_time() + '.html', 'w')
         file.write(context.driver.page_source)
         file.close()
 

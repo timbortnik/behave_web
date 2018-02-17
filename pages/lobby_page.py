@@ -1,10 +1,11 @@
-from .base_page import Page
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from random import randint
 from selenium.webdriver.common.keys import Keys
+from .base_page import Page
 from random import choice
 import time
+from selenium import webdriver
 
 
 class LobbyPage(Page):
@@ -13,6 +14,26 @@ class LobbyPage(Page):
     """
 
     url = '/chat/lobby'
+    driver = webdriver.Chrome
+    user_div = ''
+    status_str = ''
+    status_shortcuts = {'available': 'icon-avail',
+                        'away': 'icon-xa',
+                        'do not disturb': 'icon-dnd'}
+
+    class LobbyIconChanged(object):
+        def __init__(self, lobby_page, icon_status):
+            self.icon_status = icon_status
+            self.lobby_page = lobby_page
+
+        def __call__(self, *args, **kwargs):
+            element = self.lobby_page.find_ico_in_div(self.lobby_page.user_div)
+            icon_str = str(element.get_attribute('xlink:href'))
+            if self.icon_status not in icon_str:
+                self.lobby_page.status_str = icon_str
+                return icon_str
+            else:
+                return False
 
     def open_pingbot_room(self):
         self.context.driver.get(self.context.base_url + "/chat/room/4383277")
@@ -177,7 +198,7 @@ class LobbyPage(Page):
         return self.get_text_from_alias_bot()
 
     def random_click(self):
-        self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
         self.find_lobby_page_filter().click()
 
     def find_lobby_page_filter(self):
@@ -293,3 +314,37 @@ class LobbyPage(Page):
             return self.context.driver.find_element_by_xpath('//h2').text
         except:
             return "Invites sent"
+
+    def open_dropdown(self):
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        return self.context.driver.find_element_by_xpath\
+            ("//a[@href='#current-user-status']")
+
+    def click_dropdown(self):
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        self.context.wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//a[@href='#current-user-status']")))
+        self.open_dropdown().click()
+
+    def click_away(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-xa')))
+        return self.context.driver.find_element_by_id('hc-xa').click()
+
+    def click_do_not_disturb(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-dnd')))
+        return self.context.driver.find_element_by_id('hc-dnd').click()
+
+    def click_available(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-avail')))
+        return self.context.driver.find_element_by_id('hc-avail').click()
+
+    def find_element_by_username(self, username):
+        divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
+        for div in divs:
+            if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
+                self.user_div = div
+
+    def find_ico_in_div(self, div):
+        return div.find_element_by_css_selector(
+            '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
+
