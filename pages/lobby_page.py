@@ -233,21 +233,12 @@ class LobbyPage(Page):
         self.find_form_name().send_keys('@TestHenaYamkoviy')
         self.adding_data_in_alias_name_form()
 
-
     def adding_data_in_alias_name_form(self):
         if "TestHenaYamkoviy" not in self.context.driver.find_element_by_css_selector('div.Select-input>div').text:
             self.find_form_name().send_keys(Keys.ENTER)
             self.find_form_name().send_keys(Keys.ENTER)
         else:
             self.input_data_in_alias_name_form()
-        # self.find_form_name().send_keys(Keys.ARROW_DOWN)
-        # self.find_form_name().send_keys(Keys.ARROW_DOWN)
-        # self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="@TestHenaYamkoviy"]')))
-        # self.find_form_name().send_keys(Keys.ENTER)
-        # self.find_form_name().send_keys(Keys.ENTER)
-
-
-
 
     def find_added_element(self):
         self.context.wait.until(
@@ -275,7 +266,7 @@ class LobbyPage(Page):
         self.context.wait.until(lambda driver: driver.find_element_by_xpath('//a[text()="Invite your team"]'))
         self.context.driver.find_element_by_xpath('//a[text()="Invite your team"]').click()
         # sleep is needed to switch to the iframe. Without sleep it works faster than iframe opens
-        time.sleep(3)
+        time.sleep(7)
         self.context.wait.until(lambda driver: driver.find_element_by_id('invite-users-frame'))
         self.context.driver.switch_to_frame(self.context.driver.find_element_by_id('invite-users-frame'))
 
