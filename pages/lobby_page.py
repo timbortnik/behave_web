@@ -39,7 +39,8 @@ class LobbyPage(Page):
         self.context.driver.get(self.context.base_url + "/chat/room/4383277")
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
-    def find_msg_field(self):
+    def find_input_field(self):
+        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
         return self.context.driver.find_element_by_id('hc-message-input')
 
     def mention_name(self, mention_name):
@@ -47,8 +48,8 @@ class LobbyPage(Page):
 
     def send_msg_in_room(self, msg):
         if "room" in self.context.driver.current_url:
-            self.find_msg_field().send_keys('/clear' + Keys.RETURN)
-            self.find_msg_field().send_keys(msg + Keys.RETURN)
+            self.find_input_field().send_keys('/clear' + Keys.RETURN)
+            self.find_input_field().send_keys(msg + Keys.RETURN)
 
     def check_is_ping(self, msg):
         msg = "@" + self.context.mention_name + " " + msg
@@ -169,15 +170,13 @@ class LobbyPage(Page):
 
     def input_comands_in_field(self):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
-        self.clear_all_messages()
+        self.find_input_field().send_keys('/clear' + Keys.RETURN)
         alias_set_string = '/alias set ' + self.context.test_name + ' @TestHenaYamkoviy'
         self.find_input_field().send_keys(alias_set_string)
         self.find_input_field().send_keys(Keys.ENTER)
         self.find_input_field().send_keys(Keys.ENTER)
 
-    def find_input_field(self):
-        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
-        return self.context.driver.find_element_by_id('hc-message-input')
+
 
     def find_input_alias(self):
         self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
