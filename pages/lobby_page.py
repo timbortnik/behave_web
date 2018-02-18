@@ -150,10 +150,9 @@ class LobbyPage(Page):
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="msg-line"]')))
 
     def check_member_quantity(self):
-        time.sleep(5)
         self.open_created_room()
         self.context.wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, "div>.aui-avatar.aui-avatar-project.aui-avatar-small")))
+            (By.CSS_SELECTOR, ".aui-avatar.aui-avatar-project.aui-avatar-small")))
         member_icons = self.context.driver.find_elements_by_css_selector\
             ('div>.aui-avatar.aui-avatar-project.aui-avatar-small')
         if len(member_icons) > 1:
