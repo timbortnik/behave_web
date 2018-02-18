@@ -1,6 +1,8 @@
 from behave import then, given
 from selenium import webdriver
 
+driver = webdriver.Chrome
+
 
 @then('we get full user name from settings')
 def get_full_name(context):
@@ -17,7 +19,8 @@ def stat_away(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_away()
     context.lobby_page.find_element_by_username(context.hipchat_full_name)
-    context.wait.until(context.lobby_page.LobbyIconChanged(context.lobby_page, context.lobby_page.status_shortcuts['available']))
+    context.wait.until(context.lobby_page.LobbyIconChanged(
+        context.lobby_page, context.lobby_page.status_shortcuts['available']))
     assert context.lobby_page.status_shortcuts['away'] in context.lobby_page.status_str
 
 
