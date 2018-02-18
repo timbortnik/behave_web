@@ -327,8 +327,7 @@ class LobbyPage(Page):
 
     def open_dropdown(self):
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
-        return self.context.driver.find_element_by_xpath\
-            ("//a[@href='#current-user-status']")
+        return self.context.driver.find_element_by_id('status_dropdown')
 
     def click_dropdown(self):
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
@@ -355,4 +354,5 @@ class LobbyPage(Page):
                 self.user_div = div
 
     def find_ico_in_div(self, div):
-        return div.find_element_by_css_selector('.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
+        return div.find_element_by_css_selector(
+            '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
