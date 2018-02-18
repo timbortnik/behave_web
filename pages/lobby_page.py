@@ -129,7 +129,7 @@ class LobbyPage(Page):
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_invite-users-people')))
         self.context.driver.find_element_by_css_selector('#s2id_invite-users-people').click()
         self.context.driver.find_element_by_xpath(
-            '//div[contains(@class,"select2-drop")]//div[text()="ivan savarin test"]').click()
+            '//div[contains(@class,"select2-drop")]//div[text()="Test2"]').click()
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[text() = "Invite people"]')))
 
     def find_invite(self):
@@ -146,6 +146,12 @@ class LobbyPage(Page):
         self.open_created_room()
         self.context.driver.find_element_by_id('hc-message-input').send_keys('@all', Keys.RETURN, Keys.RETURN)
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="msg-line"]')))
+        self.context.wait.until(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, "div>.aui-avatar.aui-avatar-project.aui-avatar-small")))
+        member_icons = self.context.driver.find_elements_by_css_selector\
+            ('div>.aui-avatar.aui-avatar-project.aui-avatar-small')
+        if len(member_icons) > 1:
+            return True
 
     def delete_room(self):
         self.open_created_room()
@@ -175,8 +181,6 @@ class LobbyPage(Page):
         self.find_input_field().send_keys(alias_set_string)
         self.find_input_field().send_keys(Keys.ENTER)
         self.find_input_field().send_keys(Keys.ENTER)
-
-
 
     def find_input_alias(self):
         self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
@@ -290,6 +294,7 @@ class LobbyPage(Page):
         self.context.driver.find_element_by_xpath('//a[text()="Invite your team"]').click()
         # sleep is needed to switch to the iframe. Without sleep it works faster than iframe opens
         self.check_frame_available()
+        self.context.wait.until(lambda driver: driver.find_element_by_id('invite-users-frame'))
         self.context.driver.switch_to_frame(self.context.driver.find_element_by_id('invite-users-frame'))
 
     def invite_team_email_input(self):
