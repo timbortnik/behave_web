@@ -12,7 +12,6 @@ class LobbyPage(Page):
     """
     Chat page
     """
-
     url = '/chat/lobby'
     driver = webdriver.Chrome
     user_div = ''
@@ -103,9 +102,11 @@ class LobbyPage(Page):
         self.context.wait.until_not(EC.element_to_be_clickable((By.XPATH, '//*[@class="aui-dialog2-header-main"]')))
 
     def get_room_url(self):
-        global room_url
         self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".hc-page-header-topic")))
-        room_url = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
+        self.context.room_url_number = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
+
+    def give_room_url(self):
+        return self.context.room_url_number
 
     def find_add_member(self):
         self.context.wait.until_not(EC.visibility_of_element_located(
@@ -142,7 +143,7 @@ class LobbyPage(Page):
         self.find_invite().click()
 
     def open_created_room(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
+        self.context.driver.get(self.context.base_url + "/chat/room/" + self.context.room_url_number)
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
     def accept_invite(self):
@@ -344,7 +345,7 @@ class LobbyPage(Page):
             if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
                 self.user_div = div
 
+
     def find_ico_in_div(self, div):
         return div.find_element_by_css_selector(
             '.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
-

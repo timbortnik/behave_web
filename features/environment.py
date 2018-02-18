@@ -30,6 +30,8 @@ import selenium.webdriver.support.ui as ui
 import datetime
 import time
 from pages.emoticons_page import EmoticonsPage
+from helpers.api_requests import ApiRequest
+
 
 
 def get_date_time():
@@ -55,6 +57,20 @@ def before_all(context):
     context.search_page = SearchPage(context)
     context.people_page = PeoplePage(context)
     context.test_name = "@test"
+    context.api = ApiRequest
+
+
+
+
+
+def before_scenario(context, scenario):
+    if 'delete_room' in scenario.tags:
+        context.api_page.navigate()
+        context.login_page.enter_pass(context.hipchat_pass)
+        context.settings_page.api_submit()
+        context.api_page.token("Manage Rooms")
+        context.token = context.api_page.get_room_token()
+
 
 
 def after_scenario(context, scenario):
@@ -63,6 +79,14 @@ def after_scenario(context, scenario):
         file = open('scenario_result/' + scenario.name + get_date_time() + '.html', 'w')
         file.write(context.driver.page_source)
         file.close()
+
+    if 'create' in scenario.tags:
+        context.url = context.lobby_page.give_room_url()
+
+    if 'delete_room' in scenario.tags:
+        room_url = context.url
+        token = context.token
+        context.api.delete_room(self=context.api, room=room_url, token=token)
 
 
 def after_all(context):
