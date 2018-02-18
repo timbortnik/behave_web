@@ -284,10 +284,8 @@ class LobbyPage(Page):
     def invite_team_form(self):
         # lambda is important. EC causes fails
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
-        self.context.wait.until(lambda driver: driver.find_element_by_xpath('//button[text()="Invite your team"]'))
-        self.context.wait.until_not(EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, '.closeable')))
-        self.context.driver.find_element_by_xpath('//button[text()="Invite your team"]').click()
+        self.context.wait.until(lambda driver: driver.find_element_by_xpath('//a[text()="Invite your team"]'))
+        self.context.driver.find_element_by_xpath('//a[text()="Invite your team"]').click()
         # sleep is needed to switch to the iframe. Without sleep it works faster than iframe opens
         time.sleep(3)
         self.context.wait.until(lambda driver: driver.find_element_by_id('invite-users-frame'))
