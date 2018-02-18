@@ -179,7 +179,7 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_xpath("//a[@aria-label='Alias room']")
 
     def input_comands_in_field(self):
-        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
+        self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
         self.find_input_field().send_keys('/clear' + Keys.RETURN)
         alias_set_string = '/alias set ' + self.context.test_name + ' @TestHenaYamkoviy'
         self.find_input_field().send_keys(alias_set_string)
