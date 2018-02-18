@@ -29,10 +29,11 @@ def step_impl(context):
 
 @then('we accept the invitation')
 def step_impl(context):
-    assert context.lobby_page.accept_invite()
+    context.lobby_page.accept_invite()
 
 
 @then('we delete the room')
 def step_impl(context):
+    assert context.lobby_page.check_member_quantity()
     assert context.lobby_page.delete_room()
 
