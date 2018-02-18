@@ -42,27 +42,23 @@ class LobbyPage(Page):
     def find_msg_field(self):
         return self.context.driver.find_element_by_id('hc-message-input')
 
-    def clear_all_messages(self):
-        self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
-        LobbyPage.find_msg_field(self).send_keys('/clear')
-        LobbyPage.find_msg_field(self).send_keys(Keys.RETURN)
+    def mention_name(self, mention_name):
+        self.context.mention_name = mention_name
 
     def send_msg_in_room(self, msg):
         if "room" in self.context.driver.current_url:
-            if msg == '/clear':
-                self.clear_all_messages()
-                self.context.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'hc-chat-msg')))
-            else:
-                self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
-                LobbyPage.find_msg_field(self).send_keys(msg+Keys.RETURN)
+            self.find_msg_field().send_keys('/clear' + Keys.RETURN)
+            self.find_msg_field().send_keys(msg + Keys.RETURN)
 
     def check_is_ping(self, msg):
+        msg = "@" + self.context.mention_name + " " + msg
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.msg-line.msg-line div.msg-line'))
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.notification.msg-line'))
-        msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
-        for msg_from_chat in msgs:
-            if msg in msg_from_chat.text:
-                return True
+        if self.context.driver.find_element_by_xpath("//span[@class='sender-name'][text()='Pingbot']"):
+            msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
+            for msg_from_chat in msgs:
+                if msg == msg_from_chat.text:
+                    return True
 
     room_name = str(randint(1, 999))
 

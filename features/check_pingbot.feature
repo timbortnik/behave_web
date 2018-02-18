@@ -6,6 +6,7 @@ Background:
     When we enter login
     And we enter password
     Then we see Welcome title
+    And we get mention name name from settings
 
 Scenario: Check pingbot room
     Given we open pingbot room
