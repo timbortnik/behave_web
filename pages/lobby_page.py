@@ -298,6 +298,7 @@ class LobbyPage(Page):
         self.context.driver.find_element_by_xpath('//a[text()="Invite your team"]').click()
         # sleep is needed to switch to the iframe. Without sleep it works faster than iframe opens
         self.check_frame_available()
+        time.sleep(3)
         self.context.wait.until(lambda driver: driver.find_element_by_id('invite-users-frame'))
         self.context.driver.switch_to_frame(self.context.driver.find_element_by_id('invite-users-frame'))
 
