@@ -71,6 +71,7 @@ def before_scenario(context, scenario):
         context.settings_page.api_access()
         # context.login_page.enter_pass(context.hipchat_pass)
         # context.settings_page.api_submit()
+        context.api_page.create_token_by_scopes("Manage Rooms")
         context.token = context.api_page.token("Manage Rooms")
         print(context.token)
         context.lobby_page.open_created_room()
