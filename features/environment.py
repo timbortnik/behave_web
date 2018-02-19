@@ -69,7 +69,6 @@ def before_scenario(context, scenario):
         context.login_page.enter_pass(context.hipchat_pass)
         context.settings_page.navigate()
         context.settings_page.api_access()
-        context.wait.until(EC.visibility_of_element_located((By.ID, "password")))
         context.login_page.enter_pass(context.hipchat_pass)
         context.settings_page.api_submit()
         context.token = context.api_page.token("Manage Rooms")
