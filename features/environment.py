@@ -69,12 +69,13 @@ def before_scenario(context, scenario):
         context.login_page.enter_pass(context.hipchat_pass)
         context.settings_page.navigate()
         context.settings_page.api_access()
-        context.login_page.enter_pass(context.hipchat_pass)
-        context.settings_page.api_submit()
+        # context.login_page.enter_pass(context.hipchat_pass)
+        # context.settings_page.api_submit()
         context.token = context.api_page.token("Manage Rooms")
+        print(context.token)
         context.lobby_page.open_created_room()
         context.room_number = context.driver.current_url.split("/")[(len(context.driver.current_url.split("/"))) - 1]
-
+        print(context.room_number)
 
 def after_scenario(context, scenario):
     if scenario.status == "failed":
