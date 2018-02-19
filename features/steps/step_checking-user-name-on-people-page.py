@@ -1,15 +1,9 @@
-from behave import given, when, then
-import features.steps.step_checking_status as CS
+from behave import when, then
 
 
-@given('we are on Hipchat People Page')
+@when("we compare name of current user match the name on Welcome title")
 def step_impl(context):
-    context.authorized_page.switch_to_people()
-
-
-@when("we compare name of current user with name on Welcome title")
-def step_impl(context):
-    assert CS.FULL_NAME in context.authorized_page.get_page_head()
+    assert context.hipchat_full_name.split()[0] in context.authorized_page.get_page_head().split()[1]
 
 
 @when("we move to user page (on People Page)")
@@ -17,6 +11,6 @@ def step_impl(context):
     context.people_page.open_user_page()
 
 
-@then("we compare name of current user with name in user page")
+@then("we compare name of current user match the name in user page")
 def step_impl(context):
-    assert CS.FULL_NAME in context.people_page.label_page_head_on_user_page()
+    assert context.hipchat_full_name in context.people_page.label_page_head_on_user_page()

@@ -7,7 +7,7 @@
 from behave import given, when, then
 
 
-@given('we open search page')
+@given('we are on search page')
 def step_impl(context):
     context.search_page.navigate()
 
@@ -22,11 +22,28 @@ def step_impl(context):
     assert context.search_page.check_data_from_middle_form()
 
 
+@given('we get correct data')
+def step_impl(context):
+    context.settings_page.navigate()
+    context.search_page.mention_name()
+
+
 @when('we input correct data in middle search')
 def step_impl(context):
-    context.search_page.input_correct_data_in_middle_form()
+    context.search_page.navigate()
+    context.search_page.input_correct_data(context.mention_name)
 
 
 @then('we check search answer')
 def step_impl(context):
-    assert context.search_page.check_search_answer()
+    assert context.search_page.check_search_answer(context.mention_name)
+
+
+@when('we generate and input incorrect data')
+def step_impl(context):
+    context.search_page.generate_and_input_incorect_data(context.mention_name)
+
+
+@then('we check incorrect data')
+def step_impl(context):
+    assert context.search_page.check_no_result_text()
