@@ -4,3 +4,4 @@
 behave
 selenium
 chromedriver_installer
+requests
