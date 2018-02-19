@@ -37,7 +37,7 @@ def get_date_time():
     return datetime.datetime.fromtimestamp(time.time()).strftime(dt_format)
 
 
-def before_all(context):
+def before_all(context):                        # TODO add 2nd driver
     context.hipchat_login = HIPCHAT_LOGIN
     context.hipchat_pass = HIPCHAT_PASS
     context.hipchat_login_2 = HIPCHAT_LOGIN_2
