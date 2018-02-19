@@ -20,8 +20,6 @@ class ApiRequest:
     def _delete(self, url):
         request = BASE_URL + url
         r = requests.delete(request)
-        print(r.text)
-        print(BASE_URL + url)
         return r
 
 
