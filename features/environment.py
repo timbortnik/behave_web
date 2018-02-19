@@ -67,7 +67,6 @@ def before_scenario(context, scenario):
         context.login_page.enter_login(context.hipchat_login)
         context.login_page.login()
         context.login_page.enter_pass(context.hipchat_pass)
-        context.login_page.enter_pass()
         context.api_page.navigate()
         context.wait.until(EC.visibility_of_element_located((By.ID, "password")))
         context.login_page.enter_pass(context.hipchat_pass)
