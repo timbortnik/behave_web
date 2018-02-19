@@ -1,10 +1,11 @@
-from .base_page import Page
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from random import randint
 from selenium.webdriver.common.keys import Keys
+from .base_page import Page
 from random import choice
 import time
+from selenium import webdriver
 
 
 class LobbyPage(Page):
@@ -13,35 +14,52 @@ class LobbyPage(Page):
     """
 
     url = '/chat/lobby'
+    driver = webdriver.Chrome
+    user_div = ''
+    status_str = ''
+    status_shortcuts = {'available': 'icon-avail',
+                        'away': 'icon-xa',
+                        'do not disturb': 'icon-dnd'}
+
+    class LobbyIconChanged(object):
+        def __init__(self, lobby_page, icon_status):
+            self.icon_status = icon_status
+            self.lobby_page = lobby_page
+
+        def __call__(self, *args, **kwargs):
+            element = self.lobby_page.find_ico_in_div(self.lobby_page.user_div)
+            icon_str = str(element.get_attribute('xlink:href'))
+            if self.icon_status not in icon_str:
+                self.lobby_page.status_str = icon_str
+                return icon_str
+            else:
+                return False
 
     def open_pingbot_room(self):
         self.context.driver.get(self.context.base_url + "/chat/room/4383277")
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
-    def find_msg_field(self):
+    def find_input_field(self):
+        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
         return self.context.driver.find_element_by_id('hc-message-input')
 
-    def clear_all_messages(self):
-        self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
-        LobbyPage.find_msg_field(self).send_keys('/clear')
-        LobbyPage.find_msg_field(self).send_keys(Keys.RETURN)
+    def mention_name(self, mention_name):
+        self.context.mention_name = mention_name
 
     def send_msg_in_room(self, msg):
         if "room" in self.context.driver.current_url:
-            if msg == '/clear':
-                self.clear_all_messages()
-                self.context.wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, 'hc-chat-msg')))
-            else:
-                self.context.wait.until(lambda driver: driver.find_element_by_id('hc-message-input'))
-                LobbyPage.find_msg_field(self).send_keys(msg+Keys.RETURN)
+            self.find_input_field().send_keys('/clear' + Keys.RETURN)
+            self.find_input_field().send_keys(msg + Keys.RETURN)
 
     def check_is_ping(self, msg):
+        msg = "@" + self.context.mention_name + " " + msg
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.msg-line.msg-line div.msg-line'))
         self.context.wait.until(lambda driver: driver.find_element_by_css_selector('.notification.msg-line'))
-        msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
-        for msg_from_chat in msgs:
-            if msg in msg_from_chat.text:
-                return True
+        if self.context.driver.find_element_by_xpath("//span[@class='sender-name'][text()='Pingbot']"):
+            msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
+            for msg_from_chat in msgs:
+                if msg == msg_from_chat.text:
+                    return True
 
     room_name = str(randint(1, 999))
 
@@ -63,10 +81,11 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_id('create-room-button')
 
     def find_set_name(self):
-        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'create-room-name')))
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'create-room-name')))
         return self.context.driver.find_element_by_id('create-room-name')
 
     def set_name(self):
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'create-room-name')))
         self.find_set_name().send_keys(LobbyPage.room_name)
         self.context.wait.until(
             EC.element_to_be_clickable((By.XPATH, '//button[text()="Create room"]')))
@@ -86,23 +105,31 @@ class LobbyPage(Page):
         room_url = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
 
     def find_add_member(self):
+        self.context.wait.until_not(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, '.closeable')))
+        self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="hc-glance clickable"]')))
         return self.context.driver.find_element_by_xpath('//*[@class="hc-glance clickable"]')
 
     def room_actions_button(self):
         self.context.wait.until_not(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, '.closeable')))
+        self.context.wait.until_not(EC.visibility_of_element_located(
             (By.CSS_SELECTOR, '.hc-message.hc-message-success.success.closeable')))
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'room-actions-btn')))
         return self.context.driver.find_element_by_id('room-actions-btn')
 
     def click_add_member(self):
-        self.room_actions_button().click()
-        self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@title="Invite People"]')))
-        self.context.driver.find_element_by_xpath('//a[@title="Invite People"]').click()
+        self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.roster-mini-flex-list.roster_mini_container" )))
+        self.context.driver.find_element_by_xpath('//div[@class="roster-mini-flex-list roster_mini_container"]').click()
+        "hc-glance clickable"
+        self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@class="hc-tab-es-invite aui-inline-dialog-trigger"]')))
+        self.context.driver.find_element_by_xpath('//a[@class="hc-tab-es-invite aui-inline-dialog-trigger"]').click()
 
     def send_invite(self):
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#s2id_invite-users-people')))
         self.context.driver.find_element_by_css_selector('#s2id_invite-users-people').click()
         self.context.driver.find_element_by_xpath(
-            '//div[contains(@class,"select2-drop")]//div[text()="ivan savarin test"]').click()
+            '//div[contains(@class,"select2-drop")]//div[text()="Test2"]').click()
         self.context.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[text() = "Invite people"]')))
 
     def find_invite(self):
@@ -118,10 +145,20 @@ class LobbyPage(Page):
     def accept_invite(self):
         self.open_created_room()
         self.context.driver.find_element_by_id('hc-message-input').send_keys('@all', Keys.RETURN, Keys.RETURN)
+        self.context.driver.find_element_by_id('hc-message-input').send_keys('@HipChat', Keys.ENTER, Keys.ENTER)
+        self.context.driver.find_element_by_id('hc-message-input').send_keys('@here', Keys.ENTER, Keys.ENTER)
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@class="msg-line"]')))
 
-    def delete_room(self):
+    def check_member_quantity(self):
         self.open_created_room()
+        self.context.wait.until(EC.visibility_of_element_located(
+            (By.CSS_SELECTOR, ".aui-avatar.aui-avatar-project.aui-avatar-small")))
+        member_icons = self.context.driver.find_elements_by_css_selector\
+            ('.aui-avatar.aui-avatar-project.aui-avatar-small')
+        if len(member_icons) > 1:
+            return True
+
+    def delete_room(self):
         self.room_actions_button().click()
         self.context.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.delete-room-action')))
         self.context.driver.find_element_by_css_selector('.delete-room-action').click()
@@ -142,18 +179,12 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_xpath("//a[@aria-label='Alias room']")
 
     def input_comands_in_field(self):
-        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
-        self.context.wait.until(EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, ".hc-chat-row.hc-msg-nocolor.hc-msg-message.hc-classic-neue")))
-        self.clear_all_messages()
+        self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
+        self.find_input_field().send_keys('/clear' + Keys.RETURN)
         alias_set_string = '/alias set ' + self.context.test_name + ' @TestHenaYamkoviy'
         self.find_input_field().send_keys(alias_set_string)
         self.find_input_field().send_keys(Keys.ENTER)
         self.find_input_field().send_keys(Keys.ENTER)
-
-    def find_input_field(self):
-        self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
-        return self.context.driver.find_element_by_id('hc-message-input')
 
     def find_input_alias(self):
         self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
@@ -170,7 +201,7 @@ class LobbyPage(Page):
         return self.get_text_from_alias_bot()
 
     def random_click(self):
-        self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
         self.find_lobby_page_filter().click()
 
     def find_lobby_page_filter(self):
@@ -212,6 +243,9 @@ class LobbyPage(Page):
             self.input_data_in_alias_form()
             self.input_data_in_alias_name_form()
 
+    def find_form_name(self):
+        return self.context.driver.find_element(By.CSS_SELECTOR, 'div.Select-input>input')
+
     def input_data_in_alias_form(self):
         self.find_alias_form().send_keys("@test")
 
@@ -220,18 +254,15 @@ class LobbyPage(Page):
         return self.context.driver.find_element_by_name('alias')
 
     def input_data_in_alias_name_form(self):
-        self.find_form_name().send_keys('TestHenaYamkoviy')
-        self.context.wait.until(EC.presence_of_element_located((By.XPATH, '//div[text()="TestHenaYamkoviy"]')))
+        self.find_form_name().send_keys('@TestHenaYamkoviy')
         self.adding_data_in_alias_name_form()
 
     def adding_data_in_alias_name_form(self):
-        self.find_form_name().send_keys(Keys.ARROW_DOWN)
-        self.find_form_name().send_keys(Keys.ARROW_DOWN)
-        self.find_form_name().send_keys(Keys.ENTER)
-        self.find_form_name().send_keys(Keys.ENTER)
-
-    def find_form_name(self):
-        return self.context.driver.find_element(By.CSS_SELECTOR, 'div.Select-input>input')
+        if "TestHenaYamkoviy" not in self.context.driver.find_element_by_css_selector('div.Select-input>div').text:
+            self.find_form_name().send_keys(Keys.ENTER)
+            self.find_form_name().send_keys(Keys.ENTER)
+        else:
+            self.input_data_in_alias_name_form()
 
     def find_added_element(self):
         self.context.wait.until(
@@ -253,12 +284,20 @@ class LobbyPage(Page):
         for delete in self.alias_delete_icon():
             delete.click()
 
+    def check_frame_available(self):
+        try:
+            self.context.wait.until(lambda driver: driver.find_element_by_id('invite-users-frame'))
+        except:
+            self.context.driver.find_element_by_xpath('//a[text()="Invite your team"]').click()
+            self.check_frame_available()
+
     def invite_team_form(self):
         # lambda is important. EC causes fails
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
         self.context.wait.until(lambda driver: driver.find_element_by_xpath('//a[text()="Invite your team"]'))
         self.context.driver.find_element_by_xpath('//a[text()="Invite your team"]').click()
         # sleep is needed to switch to the iframe. Without sleep it works faster than iframe opens
+        self.check_frame_available()
         time.sleep(3)
         self.context.wait.until(lambda driver: driver.find_element_by_id('invite-users-frame'))
         self.context.driver.switch_to_frame(self.context.driver.find_element_by_id('invite-users-frame'))
@@ -286,3 +325,34 @@ class LobbyPage(Page):
             return self.context.driver.find_element_by_xpath('//h2').text
         except:
             return "Invites sent"
+
+    def open_dropdown(self):
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        return self.context.driver.find_element_by_id('status_dropdown')
+
+    def click_dropdown(self):
+        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+        self.context.wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//a[@href='#current-user-status']")))
+        self.open_dropdown().click()
+
+    def click_away(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-xa')))
+        return self.context.driver.find_element_by_id('hc-xa').click()
+
+    def click_do_not_disturb(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-dnd')))
+        return self.context.driver.find_element_by_id('hc-dnd').click()
+
+    def click_available(self):
+        self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-avail')))
+        return self.context.driver.find_element_by_id('hc-avail').click()
+
+    def find_element_by_username(self, username):
+        divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
+        for div in divs:
+            if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
+                self.user_div = div
+
+    def find_ico_in_div(self, div):
+        return div.find_element_by_css_selector('.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
