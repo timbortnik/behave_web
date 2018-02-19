@@ -12,7 +12,7 @@ Scenario: Enter the app, create room, invite member
     Given we are on Hipchat Lobby Page
     Then we create a room
     Then we invite member
-    @create
+
 
 Scenario: Relogin and accept the invitation
     Given we are on Hipchat Login Page
