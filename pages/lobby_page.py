@@ -302,7 +302,7 @@ class LobbyPage(Page):
         self.context.driver.switch_to_frame(self.context.driver.find_element_by_id('invite-users-frame'))
 
     def invite_team_email_input(self):
-        self.context.wait.until(lambda driver: driver.find_element_by_id('email_input'))
+        self.context.wait.until(EC.visibility_of_element_located((By.ID, 'email_input')))
         for add_email_try in range(0, 3):
             email = 'test' + str(randint(0, 999)) + '@send22u.info'
             self.context.driver.find_element_by_id('email_input').send_keys(email, Keys.ENTER)
