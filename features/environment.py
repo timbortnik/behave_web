@@ -31,7 +31,8 @@ import datetime
 import time
 from pages.emoticons_page import EmoticonsPage
 from helpers.api_requests import ApiRequest
-
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 def get_date_time():
@@ -66,8 +67,9 @@ def before_scenario(context, scenario):
         context.login_page.enter_login(context.hipchat_login)
         context.login_page.login()
         context.login_page.enter_pass(context.hipchat_pass)
-        context.login_page.login()
+        context.login_page.enter_pass()
         context.api_page.navigate()
+        context.wait.until(EC.visibility_of_element_located((By.ID, "password")))
         context.login_page.enter_pass(context.hipchat_pass)
         context.settings_page.api_submit()
         context.token = context.api_page.token("Manage Rooms")
