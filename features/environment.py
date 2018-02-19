@@ -60,17 +60,19 @@ def before_all(context):
     context.api = ApiRequest
 
 
-
-
-
 def before_scenario(context, scenario):
     if 'delete_room' in scenario.tags:
+        context.login_page.navigate()
+        context.login_page.enter_login(context.hipchat_login)
+        context.login_page.login()
+        context.login_page.enter_pass(context.hipchat_pass)
+        context.login_page.login()
         context.api_page.navigate()
         context.login_page.enter_pass(context.hipchat_pass)
         context.settings_page.api_submit()
-        context.api_page.token("Manage Rooms")
-        context.token = context.api_page.get_room_token()
-
+        context.token = context.api_page.token("Manage Rooms")
+        context.lobby_page.open_created_room()
+        context.room_number = context.driver.current_url.split("/")[(len(context.driver.current_url.split("/"))) - 1]
 
 
 def after_scenario(context, scenario):
@@ -80,12 +82,9 @@ def after_scenario(context, scenario):
         file.write(context.driver.page_source)
         file.close()
 
-    if 'create' in scenario.tags:
-        context.url = context.lobby_page.give_room_url()
-
     if 'delete_room' in scenario.tags:
-        room_url = context.url
         token = context.token
+        room_url = context.room_number
         context.api.delete_room(self=context.api, room=room_url, token=token)
 
 

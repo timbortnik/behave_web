@@ -102,11 +102,13 @@ class LobbyPage(Page):
         self.context.wait.until_not(EC.element_to_be_clickable((By.XPATH, '//*[@class="aui-dialog2-header-main"]')))
 
     def get_room_url(self):
+        global room_url
         self.context.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".hc-page-header-topic")))
-        self.context.room_url_number = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
+        room_url = self.context.driver.current_url.split("/")[(len(self.context.driver.current_url.split("/"))) - 1]
+        self.created_room = room_url
 
     def give_room_url(self):
-        return self.context.room_url_number
+        return room_url
 
     def find_add_member(self):
         self.context.wait.until_not(EC.visibility_of_element_located(
@@ -143,7 +145,7 @@ class LobbyPage(Page):
         self.find_invite().click()
 
     def open_created_room(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/" + self.context.room_url_number)
+        self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
         self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
     def accept_invite(self):

@@ -30,19 +30,15 @@ class ApiPage(Page):
         for scope in self.context.driver.find_elements_by_xpath('//tr//td[@class="scopes"]'):
             token_row_number += 1
             list_of_scope.append(scope)
-            if scope.text in scopes:
+            if scopes in scope.text:
                 token = self.context.driver.find_element_by_xpath(
                     ('//tr[{0}]//td[@class="token"]'.format(token_row_number)))
-                self.context.room_token_from_gui = token.text
-
-    def get_room_token(self):
-        return self.context.room_token_from_gui
-
-        # if scopes not in list_of_scope:
-        #     self.create_token_by_scopes(scopes)
-        #     token = self.context.driver.find_element_by_xpath\
-        #         ('//tr[{0}]//td[@class="token"]'.format((token_row_number)+1))
-        #     self.context.token = token.text
+                return token.text
+        if scopes not in list_of_scope:
+            self.create_token_by_scopes(scopes)
+            token = self.context.driver.find_element_by_xpath\
+                ('//tr[{0}]//td[@class="token"]'.format((token_row_number)+1))
+            self.context.token = token.text
 
     def create_new_token(self):
         self.context.driver.find_element_by_id('label').click()

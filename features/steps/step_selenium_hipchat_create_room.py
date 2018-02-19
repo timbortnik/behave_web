@@ -18,6 +18,7 @@ def step_impl(context):
     context.lobby_page.set_name()
     context.lobby_page.click_create_room()
     context.lobby_page.get_room_url()
+    # context.created_room_number = context.lobby_page.get_room_url()
 
 
 @then('we invite member')
