@@ -73,6 +73,7 @@ def before_scenario(context, scenario):
         # context.settings_page.api_submit()
         context.api_page.create_token_by_scopes("Manage Rooms")
         context.token = context.api_page.token("Manage Rooms")
+        context.driver.save_screenshot('scenario_result/' + "tokenparty" + "_failed.png")
         print(context.token)
         context.lobby_page.open_created_room()
         context.room_number = context.driver.current_url.split("/")[(len(context.driver.current_url.split("/"))) - 1]
