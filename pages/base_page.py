@@ -17,3 +17,9 @@ class Page(object):
 
     def at(self):
         return self.context.base_url + self.url == self.context.driver.current_url
+
+    def navigate2(self):
+        self.context.driver2.get(self.context.base_url + self.url)
+
+    def at2(self):
+        return self.context.base_url + self.url == self.context.driver2.current_url

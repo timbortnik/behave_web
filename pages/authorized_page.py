@@ -34,3 +34,13 @@ class AuthorizedPage(Page):
         self.context.driver.find_element_by_xpath('//a[text()="Emoticons"]').click()
         self.context.wait.until(EC.visibility_of_element_located((By.ID, 'drop')))
 
+
+# -------------------------- test methods for 2 browser work --------------------------------------
+
+    def label_page_head2(self):
+        self.context.wait2.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.aui-page-header-main > h1")))
+        return self.context.driver2.find_element_by_css_selector("div.aui-page-header-main > h1")
+
+    def get_page_head2(self):
+        return self.label_page_head2().text
+

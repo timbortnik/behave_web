@@ -55,6 +55,8 @@ def before_all(context):                        # TODO add 2nd driver
     context.search_page = SearchPage(context)
     context.people_page = PeoplePage(context)
     context.test_name = "@test"
+    context.driver2 = webdriver.Chrome()
+    context.wait2 = ui.WebDriverWait(context.driver2, 10)
 
 
 def after_scenario(context, scenario):

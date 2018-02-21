@@ -66,4 +66,24 @@ class LoginPage(Page):
     def current_url(self):
         return self.context.driver.current_url
 
+    # ------------------------ 2 browsers test methods -------------------------------
+
+    def input_login_2(self):
+        return self.context.driver2.find_element_by_id("email")
+
+    def input_pass_2(self):
+        return self.context.driver2.find_element_by_id("password")
+
+    def btn_signin_2(self):
+        return self.context.driver2.find_element_by_id("signin")
+
+    def enter_login_2(self, login):
+        self.input_login_2().send_keys(login)
+
+    def enter_pass_2(self, passwd):
+        self.input_pass_2().send_keys(passwd)
+
+    def login_2(self):
+        self.btn_signin_2().click()
+
 
