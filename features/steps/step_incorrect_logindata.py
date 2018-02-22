@@ -63,5 +63,5 @@ def step_impl(context):
     context.login_page.enter_login(context.driver, context.hipchat_login)
     context.login_page.email_input_form_press_enter(context.driver)
     context.login_page.enter_pass(context.driver, context.hipchat_pass)
-    context.login_page.password_input_field_press_enter()
+    context.login_page.password_input_field_press_enter(context.driver)
     assert "Welcome," in context.authorized_page.get_page_head(context.driver)
