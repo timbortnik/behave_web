@@ -20,7 +20,7 @@ def step_impl(context):
 
 @then('we are on People Page')
 def step_impl(context):
-    assert "People" in context.people_page.get_page(context.driver)
+    assert "People" in context.people_page.get_page()
 
 
 @given('we are on People Page')

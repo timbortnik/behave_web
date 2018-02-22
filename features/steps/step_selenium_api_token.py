@@ -20,7 +20,7 @@ def step_impl(context):
 
 @when('we reenter password')
 def step_impl(context):
-    context.login_page.enter_pass(context.hipchat_pass)
+    context.login_page.enter_pass(context.driver, context.hipchat_pass)
     context.settings_page.api_submit()
 
 

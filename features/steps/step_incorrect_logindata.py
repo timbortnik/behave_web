@@ -45,7 +45,7 @@ def step_impl(context):
 
 @when('we check disabled next button')
 def step_impl(context):
-    context.login_page.input_incorrect_email_data()
+    context.login_page.input_incorrect_email_data(context.driver)
     context.login_page.press_next_button()
     assert context.login_page.button_check_disabled()
 
@@ -53,7 +53,7 @@ def step_impl(context):
 @then('we check backspace icon')
 def step_impl(context):
     context.login_page.enter_login(context.driver, context.hipchat_login)
-    context.login_page.email_input_form_press_enter()
+    context.login_page.email_input_form_press_enter(context.driver)
     context.login_page.click_on_backspace_icon()
     assert '/login' in context.login_page.current_url()
 

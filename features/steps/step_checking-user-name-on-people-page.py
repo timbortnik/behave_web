@@ -3,7 +3,7 @@ from behave import when, then
 
 @when("we compare name of current user match the name on Welcome title")
 def step_impl(context):
-    assert context.hipchat_full_name.split()[0] in context.authorized_page.get_page_head().split()[1]
+    assert context.hipchat_full_name.split()[0] in context.authorized_page.get_page_head(context.driver).split()[1]
 
 
 @when("we move to user page (on People Page)")

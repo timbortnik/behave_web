@@ -13,7 +13,7 @@ def step_impl(context):
     context.lobby_page.navigate(context.driver)
     context.lobby_page.random_click()
     context.lobby_page.open_alias_room()
-    assert context.lobby_page.chat_adding_alias()
+    assert context.lobby_page.chat_adding_alias(context.driver)
 
 
 @when('we create new alias with click buttons')
