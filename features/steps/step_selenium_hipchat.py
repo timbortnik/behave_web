@@ -37,7 +37,7 @@ def step_impl(context):
 @when('we enter other password')
 def step_impl(context):
     context.login_page.enter_pass(context.driver, context.hipchat_pass_2)
-    context.login_page.login()
+    context.login_page.login(context.driver)
     pass
 
 

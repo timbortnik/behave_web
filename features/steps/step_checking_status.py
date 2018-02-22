@@ -11,7 +11,7 @@ def get_full_name(context):
 
 @given('we are in chat window')
 def step_impl1(context):
-    context.lobby_page.navigate()
+    context.lobby_page.navigate(context.driver)
 
 
 @then('we change status to "away"')

@@ -24,7 +24,7 @@ def step_impl(context):
 
 @given('we get correct data')
 def step_impl(context):
-    context.settings_page.navigate()
+    context.settings_page.navigate(context.driver)
     context.search_page.mention_name()
 
 

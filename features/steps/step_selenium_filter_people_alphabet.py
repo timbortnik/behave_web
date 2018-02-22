@@ -10,7 +10,7 @@ from behave import given, when, then
 
 @given('we are on Authorized Page')
 def step_impl(context):
-    context.authorized_page.navigate()
+    context.authorized_page.navigate(context.driver)
 
 
 @when('we click People')
@@ -20,12 +20,12 @@ def step_impl(context):
 
 @then('we are on People Page')
 def step_impl(context):
-    assert "People" in context.people_page.get_page()
+    assert "People" in context.people_page.get_page(context.driver)
 
 
 @given('we are on People Page')
 def step_impl(context):
-    context.people_page.navigate()
+    context.people_page.navigate(context.driver)
     context.people_page.create_list_name()
     context.people_page.create_admin_list()
 

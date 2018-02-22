@@ -10,7 +10,7 @@ from behave import given, when, then
 
 @given('we are on Account Page')
 def step_impl(context):
-    context.settings_page.navigate()
+    context.settings_page.navigate(context.driver)
 
 
 @when('we click API access')
@@ -26,7 +26,7 @@ def step_impl(context):
 
 @then('we are on API access page')
 def step_impl(context):
-    assert context.api_page.at()
+    assert context.api_page.at(context.driver)
 
 
 @when('we create new API token')

@@ -20,8 +20,8 @@ def get_full_name(context):
 
 @when('we send message')
 def step_impl(context):
-    context.lobby_page.send_msg_in_room('/clear')
-    context.lobby_page.send_msg_in_room('/ping me with 223')
+    context.lobby_page.send_msg_in_room(context.driver, '/clear')
+    context.lobby_page.send_msg_in_room(context.driver, '/ping me with 223')
 
 
 @then('we receive pingbot reply')

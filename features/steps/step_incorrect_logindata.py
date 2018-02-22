@@ -9,8 +9,8 @@ from behave import when, then
 
 @when('we enter incorrect login')
 def step_impl(context):
-    context.login_page.enter_login(context.hipchat_login + 'incorrect')
-    context.login_page.login()
+    context.login_page.enter_login(context.driver, context.hipchat_login + 'incorrect')
+    context.login_page.login(context.driver)
     pass
 
 
@@ -21,8 +21,8 @@ def step_impl(context):
 
 @when('we enter not valid login')
 def step_impl(context):
-    context.login_page.enter_login(context.hipchat_login + ' invalid')
-    context.login_page.login()
+    context.login_page.enter_login(context.driver, context.hipchat_login + ' invalid')
+    context.login_page.login(context.driver)
     pass
 
 
@@ -33,8 +33,8 @@ def step_impl(context):
 
 @when('we enter incorrect password')
 def step_impl(context):
-    context.login_page.enter_pass(context.hipchat_pass + 'incorrect')
-    context.login_page.login()
+    context.login_page.enter_pass(context.driver, context.hipchat_pass + 'incorrect')
+    context.login_page.login(context.driver)
     pass
 
 
@@ -52,7 +52,7 @@ def step_impl(context):
 
 @then('we check backspace icon')
 def step_impl(context):
-    context.login_page.enter_login(context.hipchat_login)
+    context.login_page.enter_login(context.driver, context.hipchat_login)
     context.login_page.email_input_form_press_enter()
     context.login_page.click_on_backspace_icon()
     assert '/login' in context.login_page.current_url()
@@ -60,8 +60,8 @@ def step_impl(context):
 
 @when('we check logining with press Enter')
 def step_impl(context):
-    context.login_page.enter_login(context.hipchat_login)
+    context.login_page.enter_login(context.driver, context.hipchat_login)
     context.login_page.email_input_form_press_enter()
-    context.login_page.enter_pass(context.hipchat_pass)
+    context.login_page.enter_pass(context.driver, context.hipchat_pass)
     context.login_page.password_input_field_press_enter()
-    assert "Welcome," in context.authorized_page.get_page_head()
+    assert "Welcome," in context.authorized_page.get_page_head(context.driver)
