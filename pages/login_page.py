@@ -12,23 +12,23 @@ class LoginPage(Page):
 
     url = '/sign_in'
 
-    def input_login(self):  # TODO add 2nd var for 2nd driver
-        return self.context.driver.find_element_by_id("email")  # TODO replace to driver+var
+    def input_login(self, driver):
+        return driver.find_element_by_id("email")
 
-    def input_pass(self):
-        return self.context.driver.find_element_by_id("password") # TODO same
+    def input_pass(self, driver):
+        return driver.find_element_by_id("password")
 
-    def btn_signin(self):
-        return self.context.driver.find_element_by_id("signin") # TODO same
+    def btn_signin(self, driver):
+        return driver.find_element_by_id("signin")
 
-    def enter_login(self, login): # TODO add 3rd var for 2nd driver
-        self.input_login().send_keys(login)
+    def enter_login(self, driver, login):
+        self.input_login(driver).send_keys(login)
 
-    def enter_pass(self, passwd): # TODO add 3rd var for 2nd driver
-        self.input_pass().send_keys(passwd)
+    def enter_pass(self, driver, passwd):
+        self.input_pass(driver).send_keys(passwd)
 
-    def login(self):
-        self.btn_signin().click()
+    def login(self, driver):
+        self.btn_signin(driver).click()
 
     def login_error_tooltip(self):
         return self.context.driver.find_element_by_css_selector('.error-field').text
@@ -48,14 +48,14 @@ class LoginPage(Page):
         else:
             return False
 
-    def input_incorrect_email_data(self):
-        self.input_login().send_keys("@com")
+    def input_incorrect_email_data(self, driver):
+        self.input_login(driver).send_keys("@com")
 
-    def email_input_form_press_enter(self):
-        self.input_login().send_keys(Keys.ENTER)
+    def email_input_form_press_enter(self, driver):
+        self.input_login(driver).send_keys(Keys.ENTER)
 
-    def password_input_field_press_enter(self):
-        self.btn_signin().send_keys(Keys.ENTER)
+    def password_input_field_press_enter(self, driver):
+        self.btn_signin(driver).send_keys(Keys.ENTER)
 
     def backspace_icon(self):
         return self.context.driver.find_element_by_css_selector('a.back')
@@ -65,25 +65,3 @@ class LoginPage(Page):
 
     def current_url(self):
         return self.context.driver.current_url
-
-    # ------------------------ 2 browsers test methods -------------------------------
-
-    def input_login_2(self):
-        return self.context.driver2.find_element_by_id("email")
-
-    def input_pass_2(self):
-        return self.context.driver2.find_element_by_id("password")
-
-    def btn_signin_2(self):
-        return self.context.driver2.find_element_by_id("signin")
-
-    def enter_login_2(self, login):
-        self.input_login_2().send_keys(login)
-
-    def enter_pass_2(self, passwd):
-        self.input_pass_2().send_keys(passwd)
-
-    def login_2(self):
-        self.btn_signin_2().click()
-
-

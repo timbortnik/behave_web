@@ -35,21 +35,25 @@ class LobbyPage(Page):
             else:
                 return False
 
-    def open_pingbot_room(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/4383277")
-        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+    def open_pingbot_room(self, driver, wait):
+        driver.get(self.context.base_url + "/chat/room/4383277")
+        wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
-    def find_input_field(self):
+    def find_input_field(self, driver):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
-        return self.context.driver.find_element_by_id('hc-message-input')
+        return driver.find_element_by_id('hc-message-input')
+
+    def find_input_field2(self, driver):
+        self.context.wait2.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
+        return driver.find_element_by_id('hc-message-input')
 
     def mention_name(self, mention_name):
         self.context.mention_name = mention_name
 
-    def send_msg_in_room(self, msg):
+    def send_msg_in_room(self, driver, msg):
         if "room" in self.context.driver.current_url:
-            self.find_input_field().send_keys('/clear' + Keys.RETURN)
-            self.find_input_field().send_keys(msg + Keys.RETURN)
+            self.find_input_field(driver).send_keys('/clear' + Keys.RETURN)
+            self.find_input_field(driver).send_keys(msg + Keys.RETURN)
 
     def check_is_ping(self, msg):
         msg = "@" + self.context.mention_name + " " + msg
@@ -178,13 +182,13 @@ class LobbyPage(Page):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
         return self.context.driver.find_element_by_xpath("//a[@aria-label='Alias room']")
 
-    def input_comands_in_field(self):
+    def input_comands_in_field(self, driver):
         self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
-        self.find_input_field().send_keys('/clear' + Keys.RETURN)
+        self.find_input_field(driver).send_keys('/clear' + Keys.RETURN)
         alias_set_string = '/alias set ' + self.context.test_name + ' @TestHenaYamkoviy'
-        self.find_input_field().send_keys(alias_set_string)
-        self.find_input_field().send_keys(Keys.ENTER)
-        self.find_input_field().send_keys(Keys.ENTER)
+        self.find_input_field(driver).send_keys(alias_set_string)
+        self.find_input_field(driver).send_keys(Keys.ENTER)
+        self.find_input_field(driver).send_keys(Keys.ENTER)
 
     def find_input_alias(self):
         self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
@@ -196,8 +200,8 @@ class LobbyPage(Page):
                 if self.context.test_name in word:
                     return True
 
-    def chat_adding_alias(self):
-        self.input_comands_in_field()
+    def chat_adding_alias(self, driver):
+        self.input_comands_in_field(driver)
         return self.get_text_from_alias_bot()
 
     def random_click(self):
@@ -356,3 +360,11 @@ class LobbyPage(Page):
 
     def find_ico_in_div(self, div):
         return div.find_element_by_css_selector('.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
+
+    def first_browser_message(self, driver):
+        self.find_input_field(driver).send_keys('Hi mate!', Keys.ENTER)
+
+    def second_browser_answer(self, driver):
+        self.context.wait2.until(EC.visibility_of_element_located((By.XPATH, '//div[text()="Hi,"]')))
+        self.find_input_field2(driver).send_keys('Hi, how are u?', Keys.ENTER)
+

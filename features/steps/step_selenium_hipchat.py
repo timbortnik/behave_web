@@ -7,15 +7,10 @@
 from behave import given, when, then
 
 
-@given('we are on Hipchat Login Page')
+@given('we are on Hipchat Login Page on {driver}')
 def step_impl(context):
     context.login_page.navigate()
     assert context.login_page.at()
-
-
-@given('we open 2nd browser window')
-def step_impl(context):
-    context.login_page.navigate2()
 
 
 @when('we enter login')
