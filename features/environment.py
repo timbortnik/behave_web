@@ -29,8 +29,9 @@ from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
 import selenium.webdriver.support.ui as ui
 import datetime
 import time
-from pages.emoticons_page import EmoticonsPage
 
+from pages.emoticons_page import EmoticonsPage
+from pages.chat_page import ChatPage
 
 def get_date_time():
     dt_format = '%Y%m%d_%H%M%S'
@@ -53,7 +54,7 @@ def before_all(context):
     context.people_page = PeoplePage(context)
     context.emoticons_page = EmoticonsPage(context)
     context.search_page = SearchPage(context)
-    context.people_page = PeoplePage(context)
+    context.chat_page = ChatPage(context)
     context.test_name = "@test"
 
 
