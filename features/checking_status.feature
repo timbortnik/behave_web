@@ -11,8 +11,11 @@ Background:
 Scenario: Checking status
     Given we are in chat window
     Then we change status to "away"
+    Then we check changing status to "away"
     Then we change status to "do not disturb"
+    Then we check changing status to "do not disturb"
     Then we change status to "available"
+    Then we check changing status to "available"
 
 
 

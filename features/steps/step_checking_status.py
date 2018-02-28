@@ -14,20 +14,33 @@ def step_impl1(context):
     context.lobby_page.navigate(context.driver)
 
 
+@given('we are in chat window on 2nd')
+def step_impl1(context):
+    context.lobby_page.navigate(context.driver2)
+
+
 @then('we change status to "away"')
 def stat_away(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_away()
+
+
+@then('we check changing status to "away" on 2nd')
+def check_stat_away(context):
     context.lobby_page.find_element_by_username(context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
         context.lobby_page, context.lobby_page.status_shortcuts['available']))
-    assert context.lobby_page.status_shortcuts['away'] in context.lobby_page.status_str
+    assert context.lobby_page.status_shortcuts['away'] in context.lobby_page.status_str(context.driver2)
 
 
 @then('we change status to "do not disturb"')
 def stat_dnd(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_do_not_disturb()
+
+
+@then('we check changing status to "do not disturb"')
+def check_stat_dnd(context):
     context.lobby_page.find_element_by_username(context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
         context.lobby_page, context.lobby_page.status_shortcuts['away']))
@@ -38,6 +51,10 @@ def stat_dnd(context):
 def stat_available(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_available()
+
+
+@then('we check changing status to "available"')
+def check_stat_available(context):
     context.lobby_page.find_element_by_username(context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
         context.lobby_page, context.lobby_page.status_shortcuts['do not disturb']))
