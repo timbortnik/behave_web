@@ -29,7 +29,6 @@ from features.environment_secret import HIPCHAT_LOGIN, HIPCHAT_PASS
 import selenium.webdriver.support.ui as ui
 import datetime
 import time
-
 from pages.emoticons_page import EmoticonsPage
 from pages.chat_page import ChatPage
 

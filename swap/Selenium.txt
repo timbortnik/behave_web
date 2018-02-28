@@ -1,0 +1,51 @@
+div#pocks Ч ищем див, у котрого айдишник равен pocks
+div.perl Ч ищем див, у которого класс обзываетс€ perl
+body[vlink=1] Ч ищем тег боди, у котрого атрибут vlink=1
+body[vlink*=1] Ч ищем тег боди, у котрого атрибут vlink содержит в себе единичку
+body[vlink$=1] Ч ищем тег боди, у которого атрибут vlink заканчиваетс€ на единичку
+body[vlink^=1] Ч ищем тег боди, у которого атрибут vlink начинаетс€ на единичку
+
+ѕробел находит все потомков у элемента. ѕример:
+div#ires a Ч находит все ссылки у дива с айдишником ires
+div#ires a:nth-of-type(1) Ч находит все ссылки у дива с айдишником ires первые
+
+div >a Ч все дивы, у которых сразу за ними есть потомок а
+div+div Ч находит див который идет сразу за первым дивом
+div+a Ч все дивы за которыми сразу идут a элементы(ссылки)
+div ~ div Ч пропускает элемент за элементом
+a:contains(Ђggdgdgdї) Ч находит а
+Ќа 37 минуте примеры, где можно потренькатьс€
+
+*.warning Ч любой элемент с классом warning
+div * p Ч ищем элемент p у котрого есть предок div и между ними могут быть элементы
+h1.opener+h2 Ч ищем элемент h2 соседм перед которым элемент h1 имеющий класс opener
+a[rel~=їcopyringї] Ч ищем ссылку с атрибутом rel, у которого внутри есть класс со значнием copyring
+span[hello=ТClevelandТ][goodbye=ТColumbusТ] Ч ищет элемент span, у котрого есть атрибут hello со значнеием Cleveland и атрибут goodbye со значнием Columbus
+
+div.flyout > a Ч Ќайти все ссылки, которые наход€тс€ сразу после div элемента с классом flyout
+div#action_list_body_current li:nth-of-type(1) Ч Ќайти вторую задачу в списке current
+#quick search a[accesskey =їpї] -Ќайти вторую картинку с атрибутом accesskey Ђpї в quick search
+#context_list a:contains(СlineТ) -найти контекст в таблице Contexts который содержит текст Ђlineї
+xpath локаторы: 
+/body/.. Ч родитель бади, тобишь тег штмль
+
+¬ чем отличие xpath от css, в икспасе мы можем ходить снизу вверх, а в цсс только сверху вниз. //
+//a[text()=Тsome valueТ] Ч найти ссылку с текстом some value
+author[last-name [position()=1]= ЂBobї] Ч найти элемент author у которого есть элемент last-name и у last-name это перва€ позици€
+//div[@id=ТheaderТ] Ч элемент див с айди хедер
+//div[1] Ч первый див
+//div[position()=1] Ч как € понимаю все равно что //div[1]
+//div[2 and 3] Ч второй и третий див
+
+¬ xpath отношени€ элементов определ€ют оси
+// Ч означает что ищем по всем вложенным элементам
+/descendant:div[@id=ТheaderТ] Ч находит всех потомков дива с айди хеадер
+
+book/*/last-name Ч находим элемент бук после котрого идет любой элемент а за ним сразу идет элемент ластнейм
+*[@specialty] Ч любой элемент с атрибутом specialty
+author[first-name][3] Ч элемент с названием author у которого есть потомок элемент first-name и он третий
+author[not(degree or award) and publication] Ч находим элемент author у котрого нет потомка элемента degree или award, но есть элемент publication
+ancestor::author[parent::book][1] Ч находим предка у которого есть название элемента author и у которого есть непорсдетсвенный родитель book и выбираем первую позицию
+
+//a[text() =їPreferencesї][ancestor::*[@id=ТheaderТ]] Ч найти ссылку Preferences в верхнем меню (идем сверху вниз, вначале пишем ссылку с текстом Preferences
+//*[@id =Тaction_list_curentТ]//span[@class=Тnext_action_nameТ][following-sibling::*/a[contains(@href,ТcontextsТ) and text() =ТOfflineТ]] Ч Ќайти все задачи в списке current с контекстом Offline
