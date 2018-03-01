@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from os import listdir
 import os
+import  time
 
 
 class ChatPage(Page):
@@ -34,17 +35,17 @@ class ChatPage(Page):
     def upload_attach(self):
         img_path = os.getcwd() + '/swap/Selenium.txt'
         #self.context.driver.find_element_by_css_selector(".hc-attach").click()
-        attach = self.context.driver.find_element_by_css_selector(".hc-attach")
-        attach.click()
-        #attach.send_keys(img_path)
+        attach = self.context.driver.find_element_by_id("fileInput")
+        #attach.click()
+        attach.send_keys(img_path)
+        time.sleep(3)
+        self.context.driver.find_element_by_id("hc-message-input").send_keys(Keys.ENTER)
         #self.context.driver.find_element_by_css_selector(".hc-attach").send_keys(self.img_path)
         #self.context.driver.find_element_by_css_selector(".hc-attach").send_keys("D:\\repository\\behave_web\\swap\\7z1801.exe")
-
         #self.driver.find_element_by_css_selector('input[type="file"]').clear()
         #self.driver.find_element_by_css_selector('input[type="file"]').send_keys(self.img_path)
         #self.context.driver.get(self.img_path)
         #self.context.driver.post(self.img_path)
-
 
 
     def click_add_attach(self):
