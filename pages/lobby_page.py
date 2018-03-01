@@ -352,11 +352,14 @@ class LobbyPage(Page):
         self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-avail')))
         return self.context.driver.find_element_by_id('hc-avail').click()
 
-    def find_element_by_username(self, username):
-        divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
+    def find_element_by_username(self, driver, username):
+        self.context.wait.until(lambda d: driver.find_element_by_id('status_dropdown'))
+        #divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
+        divs = driver.find_elements_by_class_name('hc-lobby-list-item')
         for div in divs:
             if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
                 self.user_div = div
+                break
 
     def find_ico_in_div(self, div):
         return div.find_element_by_css_selector('.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
