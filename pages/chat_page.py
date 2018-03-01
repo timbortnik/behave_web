@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 from os import listdir
 import os
 import  time
+import random
 
 
 class ChatPage(Page):
@@ -34,20 +35,22 @@ class ChatPage(Page):
 
     def upload_attach(self):
         img_path = os.getcwd() + '/swap/Selenium.txt'
-        #self.context.driver.find_element_by_css_selector(".hc-attach").click()
         attach = self.context.driver.find_element_by_id("fileInput")
-        #attach.click()
         attach.send_keys(img_path)
-        time.sleep(3)
-        self.context.driver.find_element_by_id("hc-message-input").send_keys(Keys.ENTER)
-        #self.context.driver.find_element_by_css_selector(".hc-attach").send_keys(self.img_path)
-        #self.context.driver.find_element_by_css_selector(".hc-attach").send_keys("D:\\repository\\behave_web\\swap\\7z1801.exe")
-        #self.driver.find_element_by_css_selector('input[type="file"]').clear()
-        #self.driver.find_element_by_css_selector('input[type="file"]').send_keys(self.img_path)
-        #self.context.driver.get(self.img_path)
-        #self.context.driver.post(self.img_path)
+        #time.sleep(7)
+        #self.context.wait.until_not(EC.visibility_of_element_located((By.ID, "hc-chat-actions")))
+
+        unique_name = 'test' + str(random.random())
 
 
-    def click_add_attach(self):
-        #self.context.driver.find_element_by_id('submit_emoticon').click()
-        self.context.driver.find_element_by_id('hc-message-input').click()
+        self.context.driver.find_element_by_id("hc-message-input").send_keys(unique_name, Keys.ENTER)
+        #self.context.wait.until_not(EC.presence_of_element_located((By.ID, "hc-chat-actions")))
+        time.sleep(2)
+
+        # for i in self.context.driver.find_elements_by_css_selector('div.hc-chat-msg'):
+        #     if i.find_element_by_css_selector('span.description').text == unique_name:
+        #         return i.find_element_by_css_selector('div.file-meta').text
+
+    # def click_add_attach(self):
+    #     #self.context.driver.find_element_by_id('submit_emoticon').click()
+    #     self.context.driver.find_element_by_id('hc-message-input').click()
