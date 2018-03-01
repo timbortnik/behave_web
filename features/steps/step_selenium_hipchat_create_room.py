@@ -35,5 +35,5 @@ def step_impl(context):
 
 @then('we delete the room')
 def step_impl(context):
-    # assert context.lobby_page.delete_room()
-    assert True == False
+    assert context.lobby_page.delete_room()
+
