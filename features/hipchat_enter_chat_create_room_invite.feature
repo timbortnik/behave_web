@@ -17,7 +17,7 @@ Scenario: Enter the app, create room, invite member
 Scenario: Relogin and accept the invitation
     Given we are on Hipchat Login Page
     When we enter other login
-    And we enter other password
+    When we enter other password
     Then we see Welcome title
     Given we are on Hipchat Lobby Page
     Then we accept the invitation
