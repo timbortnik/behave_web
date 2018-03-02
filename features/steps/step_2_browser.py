@@ -19,12 +19,12 @@ def step_impl(context, browser):
     context.login_page.login(context.browsers[browser]['driver'])
 
 
-@then('we see Welcome title on {browser}')
+@then('we see Welcome title on "{browser}"')
 def step_impl(context, browser):
     assert "Welcome," in context.authorized_page.get_page_head(context.browsers[browser]['driver'])
 
 
-@given('we are on Hipchat Lobby Page on {browser}')
+@given('we are on Hipchat Lobby Page on "{browser}"')
 def step_impl(context, browser):
     context.authorized_page.enter_app(context.browsers[browser]['driver'])
 
