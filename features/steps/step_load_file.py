@@ -11,15 +11,7 @@ def step_impl(context):
 def step_impl(context):
     context.chat_page.upload_attach()
 
-
-@when('we upload a file')
-def step_impl(context):
-    #context.chat_page.upload_attach()
-    #context.chat_page.set_attach_name()
-    pass
-
-
 @then('we see new file')
 def step_impl(context):
+    #assert "Selenium.txt" in context.chat_page.check_attach_by_name()
     pass
-
