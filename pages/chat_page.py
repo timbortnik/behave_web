@@ -20,10 +20,6 @@ class ChatPage(Page):
 
 
 
-    # def set_attach_name(self):
-    #     self.context.wait.until(EC.visibility_of_element_located((By.ID, 'hc-message-input')))
-    #     self.context.driver.find_element_by_id('hc-message-input').send_keys('test')
-
     def open_home_room(self):
         self.set_home_room().click()
 
@@ -37,19 +33,21 @@ class ChatPage(Page):
         img_path = os.getcwd() + '/swap/Selenium.txt'
         attach = self.context.driver.find_element_by_id("fileInput")
         attach.send_keys(img_path)
-        #time.sleep(7)
-        #self.context.wait.until_not(EC.visibility_of_element_located((By.ID, "hc-chat-actions")))
-
-        unique_name = 'test' + str(random.random())
-
-
+        unique_name = 'test_' + str(random.random())
         self.context.driver.find_element_by_id("hc-message-input").send_keys(unique_name, Keys.ENTER)
-        #self.context.wait.until_not(EC.presence_of_element_located((By.ID, "hc-chat-actions")))
-        time.sleep(2)
+        self.context.wait.until(lambda driver: driver.find_element_by_css_selector('span.description'))
+        xpath_uname = "//span[@class='description'][text()='" + unique_name + "']"
+        self.context.wait.until(lambda driver: driver.find_element_by_xpath(xpath_uname))
 
-        # for i in self.context.driver.find_elements_by_css_selector('div.hc-chat-msg'):
-        #     if i.find_element_by_css_selector('span.description').text == unique_name:
-        #         return i.find_element_by_css_selector('div.file-meta').text
+
+    # def check_is_attach(self, msg):
+    #     self.context.wait.until(lambda driver: driver.find_element_by_css_selector('span.description'))
+    #     xpath2 = "//span[@class='description'][text()="+ self.context.unique_name + "']"
+    #     if self.context.driver.find_element_by_xpath(xpath2):
+    #         msgs = self.context.driver.find_elements_by_css_selector('.msg-line.msg-line div.msg-line')
+    #         for msg_from_chat in msgs:
+    #             if msg == msg_from_chat.text:
+    #                 return True
 
     # def click_add_attach(self):
     #     #self.context.driver.find_element_by_id('submit_emoticon').click()
