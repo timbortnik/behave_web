@@ -22,12 +22,15 @@ class LobbyPage(Page):
                         'do not disturb': 'icon-dnd'}
 
     class LobbyIconChanged(object):
-        def __init__(self, lobby_page, icon_status):
+        def __init__(self, lobby_page, icon_status, driver):
             self.icon_status = icon_status
             self.lobby_page = lobby_page
+            self.driver = driver
 
         def __call__(self, *args, **kwargs):
+            self.driver.execute_script('arguments[0].scrollIntoView(true);', self.lobby_page.user_div)
             element = self.lobby_page.find_ico_in_div(self.lobby_page.user_div)
+            # self.driver.execute_script('arguments[0].scrollIntoView(true);', element)
             icon_str = str(element.get_attribute('xlink:href'))
             if self.icon_status not in icon_str:
                 self.lobby_page.status_str = icon_str
@@ -354,12 +357,23 @@ class LobbyPage(Page):
 
     def find_element_by_username(self, driver, username):
         self.context.wait.until(lambda d: driver.find_element_by_id('status_dropdown'))
-        #divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
         divs = driver.find_elements_by_class_name('hc-lobby-list-item')
+        last_div = divs[0]
+        while divs[len(divs)-1] != last_div:
+            div_found = self.find_div_by_text(username, divs)
+            if div_found:
+                self.user_div = div_found
+                break
+            last_div = divs[len(divs)-1]
+            driver.execute_script('arguments[0].scrollIntoView(true);', last_div)
+            divs = driver.find_elements_by_class_name('hc-lobby-list-item')
+
+    def find_div_by_text(self, username, divs):
         for div in divs:
             if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
-                self.user_div = div
-                break
+                return div
+        return False
+
 
     def find_ico_in_div(self, div):
         return div.find_element_by_css_selector('.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')

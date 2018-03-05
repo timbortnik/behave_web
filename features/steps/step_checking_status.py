@@ -1,7 +1,4 @@
 from behave import then, step
-from selenium import webdriver
-
-driver = webdriver.Chrome
 
 
 @then('we get full user name from settings')
@@ -24,7 +21,7 @@ def stat_away(context):
 def check_stat_away(context, browser):
     context.lobby_page.find_element_by_username(context.browsers[browser]['driver'], context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
-        context.lobby_page, context.lobby_page.status_shortcuts['available']))
+        context.lobby_page, context.lobby_page.status_shortcuts['available'], context.browsers[browser]['driver']))
     assert context.lobby_page.status_shortcuts['away'] in context.lobby_page.status_str
 
 
@@ -38,7 +35,7 @@ def stat_dnd(context):
 def check_stat_dnd(context, browser):
     context.lobby_page.find_element_by_username(context.browsers[browser]['driver'], context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
-        context.lobby_page, context.lobby_page.status_shortcuts['away']))
+        context.lobby_page, context.lobby_page.status_shortcuts['away'], context.browsers[browser]['driver']))
     assert context.lobby_page.status_shortcuts['do not disturb'] in context.lobby_page.status_str
 
 
@@ -52,5 +49,5 @@ def stat_available(context):
 def check_stat_available(context, browser):
     context.lobby_page.find_element_by_username(context.browsers[browser]['driver'], context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
-        context.lobby_page, context.lobby_page.status_shortcuts['do not disturb']))
+        context.lobby_page, context.lobby_page.status_shortcuts['do not disturb'], context.browsers[browser]['driver']))
     assert context.lobby_page.status_shortcuts['available'] in context.lobby_page.status_str
