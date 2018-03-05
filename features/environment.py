@@ -16,6 +16,10 @@ before_tag(context, tag), after_tag(context, tag)
 
 """
 
+import mechanicalsoup
+from bs4 import BeautifulSoup
+import urllib.request
+from http.cookiejar import CookieJar
 from selenium import webdriver
 from pages.login_page import LoginPage
 from pages.authorized_page import AuthorizedPage
@@ -55,6 +59,7 @@ def before_all(context):
     context.search_page = SearchPage(context)
     context.people_page = PeoplePage(context)
     context.test_name = "@test"
+    get_token()
 
 
 def after_scenario(context, scenario):
@@ -67,3 +72,38 @@ def after_scenario(context, scenario):
 
 def after_all(context):
     context.driver.quit()
+
+
+def get_token(context):
+    LOGIN = context.hipchat_login
+    PASSWORD = context.hipchat_pass
+    browser = mechanicalsoup.Browser()
+    URL = 'https://bortnik.hipchat.com/login_password?email={0}'.format(LOGIN.replace('@', '%40'))
+
+    login_page = browser.get(URL)
+
+    login_form = login_page.soup.find('form', {'name': 'signin'})
+
+    login_form.find('input', {'type': 'password'})['value'] = PASSWORD
+
+    browser.submit(login_form, login_page.url)
+    URL2 = 'https://bortnik.hipchat.com/account/api'
+
+    confirm_form_url = browser.get(URL2)
+
+    confirm_form = confirm_form_url.soup.find('form',
+                                              {'action': 'https://bortnik.hipchat.com/account/confirm_password'})
+
+    pass_confirm_form = confirm_form.find('div', {'class': 'field-group password-row'})
+
+    pass_confirm_form.find('input', {'id': 'password'})['value'] = PASSWORD
+    print(pass_confirm_form)
+    confirm_but = confirm_form.find('div', {'class': 'buttons-container'})
+    browser.submit(confirm_form, confirm_form_url.url)
+
+    table_body = confirm_form_url.soup.find('table', {'id': 'tokens'})
+
+    rows = table_body.find_all('tr')
+    for row in rows:
+        cols = row.find_all('td')
+        print(cols)
