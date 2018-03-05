@@ -15,6 +15,7 @@ class ChatPage(Page):
     """
 
     url = '/chat'
+    unique_name = 'test_' + str(random.random())
 
 
     def open_home_room(self):
@@ -30,12 +31,12 @@ class ChatPage(Page):
         img_path = os.getcwd() + '/swap/Selenium.txt'
         attach = self.context.driver.find_element_by_id("fileInput")
         attach.send_keys(img_path)
-        unique_name = 'test_' + str(random.random())
-        self.context.driver.find_element_by_id("hc-message-input").send_keys(unique_name, Keys.ENTER)
-        xpath_uname = "//span[@class='description'][text()='" + unique_name + "']"
+        self.context.driver.find_element_by_id("hc-message-input").send_keys(self.unique_name, Keys.ENTER)
+        xpath_uname = "//span[@class='description'][text()='" + self.unique_name + "']"
         self.context.wait.until(lambda driver: driver.find_element_by_xpath(xpath_uname))
 
     def check_attach_by_name(self):
+        print(self.unique_name)
         for i in self.context.driver.find_elements_by_css_selector('div.hc-chat-msg'):
-            if i.find_element_by_css_selector('span.description').text == self.context.unique_name:
+            if i.find_element_by_css_selector('span.description').text == self.unique_name:
                 return i.find_element_by_css_selector('div.file-meta').text

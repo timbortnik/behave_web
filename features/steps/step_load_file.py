@@ -13,5 +13,4 @@ def step_impl(context):
 
 @then('we see new file')
 def step_impl(context):
-    #assert "Selenium.txt" in context.chat_page.check_attach_by_name()
-    pass
+    assert "Selenium.txt" in context.chat_page.check_attach_by_name()
