@@ -3,7 +3,7 @@ from behave import given, when, then
 
 @given("we are on Hipchat chat Page")
 def step_impl(context):
-    context.chat_page.navigate()
+    context.chat_page.navigate(context.driver)
     context.chat_page.set_home_room()
     context.chat_page.open_home_room()
 
