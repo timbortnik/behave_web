@@ -3,7 +3,7 @@ from behave import when, then, given
 
 @given('we are on Lobby Page')
 def step_impl(context):
-    context.lobby_page.navigate()
+    context.lobby_page.navigate(context.driver)
 
 
 @when('we click Invite your team')

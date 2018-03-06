@@ -33,6 +33,14 @@ class PeoplePage(Page):
     def label_page_head_on_user_page(self):
         return self.context.driver.find_element_by_css_selector("div.aui-item > h2").text
 
+    def open_user_page(self):
+        xpath_for_search = '//a[contains(text(), "' + self.context.hipchat_full_name + '")]'
+        self.context.wait.until(EC.visibility_of_element_located((By.XPATH, xpath_for_search)))
+        self.context.driver.find_element_by_xpath(xpath_for_search).click()
+
+    def label_page_head_on_user_page(self):
+        return self.context.driver.find_element_by_css_selector("div.aui-item > h2").text
+
     def we_see_all_users(self):
         self.context.wait.until(EC.visibility_of_element_located((By.XPATH, '//ol[@class="aui-nav-pagination"]')))
         all_users =[]

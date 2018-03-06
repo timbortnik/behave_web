@@ -9,19 +9,19 @@ from behave import given, when, then
 
 @given('we open pingbot room')
 def step_impl(context):
-    context.lobby_page.open_pingbot_room()
+    context.lobby_page.open_pingbot_room(context.driver, context.wait)
 
 
 @then('we get mention name name from settings')
 def get_full_name(context):
-    context.settings_page.navigate()
+    context.settings_page.navigate(context.driver)
     context.hipchat_mention_name = context.settings_page.mention_name()
 
 
 @when('we send message')
 def step_impl(context):
-    context.lobby_page.send_msg_in_room('/clear')
-    context.lobby_page.send_msg_in_room('/ping me with 223')
+    context.lobby_page.send_msg_in_room(context.driver, '/clear')
+    context.lobby_page.send_msg_in_room(context.driver, '/ping me with 223')
 
 
 @then('we receive pingbot reply')
