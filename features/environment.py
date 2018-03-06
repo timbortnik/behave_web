@@ -30,14 +30,14 @@ import selenium.webdriver.support.ui as ui
 import datetime
 import time
 from pages.emoticons_page import EmoticonsPage
-
+from pages.chat_page import ChatPage
 
 def get_date_time():
     dt_format = '%Y%m%d_%H%M%S'
     return datetime.datetime.fromtimestamp(time.time()).strftime(dt_format)
 
 
-def before_all(context):
+def before_all(context):                        # TODO add 2nd driver
     context.hipchat_login = HIPCHAT_LOGIN
     context.hipchat_pass = HIPCHAT_PASS
     context.hipchat_login_2 = HIPCHAT_LOGIN_2
@@ -53,8 +53,18 @@ def before_all(context):
     context.people_page = PeoplePage(context)
     context.emoticons_page = EmoticonsPage(context)
     context.search_page = SearchPage(context)
-    context.people_page = PeoplePage(context)
+    context.chat_page = ChatPage(context)
     context.test_name = "@test"
+    context.driver_2 = webdriver.Chrome()
+    context.wait_2 = ui.WebDriverWait(context.driver_2, 10)
+    context.browsers = {'1st browser': {'driver': context.driver,
+                                        'login': context.hipchat_login,
+                                        'pass': context.hipchat_pass,
+                                        'wait': context.wait},
+                        '2nd browser': {'driver': context.driver_2,
+                                        'login': context.hipchat_login_2,
+                                        'pass': context.hipchat_pass_2,
+                                        'wait': context.wait_2}}
 
 
 def after_scenario(context, scenario):

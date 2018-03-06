@@ -22,12 +22,15 @@ class LobbyPage(Page):
                         'do not disturb': 'icon-dnd'}
 
     class LobbyIconChanged(object):
-        def __init__(self, lobby_page, icon_status):
+        def __init__(self, lobby_page, icon_status, driver):
             self.icon_status = icon_status
             self.lobby_page = lobby_page
+            self.driver = driver
 
         def __call__(self, *args, **kwargs):
+            self.driver.execute_script('arguments[0].scrollIntoView(true);', self.lobby_page.user_div)
             element = self.lobby_page.find_ico_in_div(self.lobby_page.user_div)
+            # self.driver.execute_script('arguments[0].scrollIntoView(true);', element)
             icon_str = str(element.get_attribute('xlink:href'))
             if self.icon_status not in icon_str:
                 self.lobby_page.status_str = icon_str
@@ -35,21 +38,25 @@ class LobbyPage(Page):
             else:
                 return False
 
-    def open_pingbot_room(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/4383277")
-        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+    def open_pingbot_room(self, driver, wait):
+        driver.get(self.context.base_url + "/chat/room/4383277")
+        wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
-    def find_input_field(self):
+    def find_input_field(self, driver):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
-        return self.context.driver.find_element_by_id('hc-message-input')
+        return driver.find_element_by_id('hc-message-input')
+
+    def find_input_field2(self, driver):
+        self.context.wait2.until(EC.presence_of_element_located((By.ID, 'hc-message-input')))
+        return driver.find_element_by_id('hc-message-input')
 
     def mention_name(self, mention_name):
         self.context.mention_name = mention_name
 
-    def send_msg_in_room(self, msg):
+    def send_msg_in_room(self, driver, msg):
         if "room" in self.context.driver.current_url:
-            self.find_input_field().send_keys('/clear' + Keys.RETURN)
-            self.find_input_field().send_keys(msg + Keys.RETURN)
+            self.find_input_field(driver).send_keys('/clear' + Keys.RETURN)
+            self.find_input_field(driver).send_keys(msg + Keys.RETURN)
 
     def check_is_ping(self, msg):
         msg = "@" + self.context.mention_name + " " + msg
@@ -178,13 +185,13 @@ class LobbyPage(Page):
         self.context.wait.until(EC.presence_of_element_located((By.ID, 'status_dropdown')))
         return self.context.driver.find_element_by_xpath("//a[@aria-label='Alias room']")
 
-    def input_comands_in_field(self):
+    def input_comands_in_field(self, driver):
         self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
-        self.find_input_field().send_keys('/clear' + Keys.RETURN)
+        self.find_input_field(driver).send_keys('/clear' + Keys.RETURN)
         alias_set_string = '/alias set ' + self.context.test_name + ' @TestHenaYamkoviy'
-        self.find_input_field().send_keys(alias_set_string)
-        self.find_input_field().send_keys(Keys.ENTER)
-        self.find_input_field().send_keys(Keys.ENTER)
+        self.find_input_field(driver).send_keys(alias_set_string)
+        self.find_input_field(driver).send_keys(Keys.ENTER)
+        self.find_input_field(driver).send_keys(Keys.ENTER)
 
     def find_input_alias(self):
         self.context.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.notification.msg-line')))
@@ -196,8 +203,8 @@ class LobbyPage(Page):
                 if self.context.test_name in word:
                     return True
 
-    def chat_adding_alias(self):
-        self.input_comands_in_field()
+    def chat_adding_alias(self, driver):
+        self.input_comands_in_field(driver)
         return self.get_text_from_alias_bot()
 
     def random_click(self):
@@ -348,11 +355,33 @@ class LobbyPage(Page):
         self.context.wait.until(EC.element_to_be_clickable((By.ID, 'hc-avail')))
         return self.context.driver.find_element_by_id('hc-avail').click()
 
-    def find_element_by_username(self, username):
-        divs = self.context.driver.find_elements_by_class_name('hc-lobby-list-item')
+    def find_element_by_username(self, driver, username):
+        self.context.wait.until(lambda d: driver.find_element_by_id('status_dropdown'))
+        divs = driver.find_elements_by_class_name('hc-lobby-list-item')
+        last_div = divs[0]
+        while divs[len(divs)-1] != last_div:
+            div_found = self.find_div_by_text(username, divs)
+            if div_found:
+                self.user_div = div_found
+                break
+            last_div = divs[len(divs)-1]
+            driver.execute_script('arguments[0].scrollIntoView(true);', last_div)
+            divs = driver.find_elements_by_class_name('hc-lobby-list-item')
+
+    def find_div_by_text(self, username, divs):
         for div in divs:
             if div.find_element_by_css_selector('div:nth-child(2)>span:nth-child(1)').text == username:
-                self.user_div = div
+                return div
+        return False
+
 
     def find_ico_in_div(self, div):
         return div.find_element_by_css_selector('.hc-lobby-list-item>.hc-lobby-list-icon>span>span:nth-child(2)>svg>use')
+
+    def first_browser_message(self, driver):
+        self.find_input_field(driver).send_keys('Hi mate!', Keys.ENTER)
+
+    def second_browser_answer(self, driver):
+        self.context.wait2.until(EC.visibility_of_element_located((By.XPATH, '//div[text()="Hi,"]')))
+        self.find_input_field2(driver).send_keys('Hi, how are u?', Keys.ENTER)
+

@@ -9,7 +9,7 @@ from behave import then, step
 
 @step('we are on Account settings Page')
 def step_impl(context):
-    context.settings_page.navigate()
+    context.settings_page.navigate(context.driver)
 
 
 @then('we see filled account settings')
