@@ -10,7 +10,7 @@ from behave import given, when, then
 
 @given('we are on Account Page')
 def step_impl(context):
-    context.settings_page.navigate()
+    context.settings_page.navigate(context.driver)
 
 
 @when('we click API access')
@@ -20,13 +20,13 @@ def step_impl(context):
 
 @when('we reenter password')
 def step_impl(context):
-    context.login_page.enter_pass(context.hipchat_pass)
+    context.login_page.enter_pass(context.driver, context.hipchat_pass)
     context.settings_page.api_submit()
 
 
 @then('we are on API access page')
 def step_impl(context):
-    assert context.api_page.at()
+    assert context.api_page.at(context.driver)
 
 
 @when('we create new API token')

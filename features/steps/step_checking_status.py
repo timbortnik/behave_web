@@ -1,7 +1,4 @@
-from behave import then, given
-from selenium import webdriver
-
-driver = webdriver.Chrome
+from behave import then, step
 
 
 @then('we get full user name from settings')
@@ -9,18 +6,22 @@ def get_full_name(context):
     context.hipchat_full_name = context.settings_page.full_name()
 
 
-@given('we are in chat window')
-def step_impl1(context):
-    context.lobby_page.navigate()
+@step('we are in chat window on "{browser}"')
+def step_impl1(context, browser):
+    context.lobby_page.navigate(context.browsers[browser]['driver'])
 
 
 @then('we change status to "away"')
 def stat_away(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_away()
-    context.lobby_page.find_element_by_username(context.hipchat_full_name)
+
+
+@then('we check changing status to "away" on "{browser}"')
+def check_stat_away(context, browser):
+    context.lobby_page.find_element_by_username(context.browsers[browser]['driver'], context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
-        context.lobby_page, context.lobby_page.status_shortcuts['available']))
+        context.lobby_page, context.lobby_page.status_shortcuts['available'], context.browsers[browser]['driver']))
     assert context.lobby_page.status_shortcuts['away'] in context.lobby_page.status_str
 
 
@@ -28,9 +29,13 @@ def stat_away(context):
 def stat_dnd(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_do_not_disturb()
-    context.lobby_page.find_element_by_username(context.hipchat_full_name)
+
+
+@then('we check changing status to "do not disturb" on "{browser}"')
+def check_stat_dnd(context, browser):
+    context.lobby_page.find_element_by_username(context.browsers[browser]['driver'], context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
-        context.lobby_page, context.lobby_page.status_shortcuts['away']))
+        context.lobby_page, context.lobby_page.status_shortcuts['away'], context.browsers[browser]['driver']))
     assert context.lobby_page.status_shortcuts['do not disturb'] in context.lobby_page.status_str
 
 
@@ -38,7 +43,11 @@ def stat_dnd(context):
 def stat_available(context):
     context.lobby_page.click_dropdown()
     context.lobby_page.click_available()
-    context.lobby_page.find_element_by_username(context.hipchat_full_name)
+
+
+@then('we check changing status to "available" on "{browser}"')
+def check_stat_available(context, browser):
+    context.lobby_page.find_element_by_username(context.browsers[browser]['driver'], context.hipchat_full_name)
     context.wait.until(context.lobby_page.LobbyIconChanged(
-        context.lobby_page, context.lobby_page.status_shortcuts['do not disturb']))
+        context.lobby_page, context.lobby_page.status_shortcuts['do not disturb'], context.browsers[browser]['driver']))
     assert context.lobby_page.status_shortcuts['available'] in context.lobby_page.status_str

@@ -9,7 +9,7 @@ from behave import given, when, then
 
 @given('we are on Hipchat Lobby Page')
 def step_impl(context):
-    context.authorized_page.enter_app()
+    context.authorized_page.enter_app(context.driver)
 
 
 @then('we create a room')
