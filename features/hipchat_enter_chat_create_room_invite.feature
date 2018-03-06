@@ -20,7 +20,7 @@ Scenario: Relogin and accept the invitation
     And we enter other password
     Then we see Welcome title
     Given we are on Hipchat Lobby Page
-    Then we accept the invitation
+    Then we accept the invitation from "1st browser"
 
 @delete_room
 Scenario: Relogin to 1st acc and delete room

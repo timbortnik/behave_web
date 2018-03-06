@@ -27,9 +27,9 @@ def step_impl(context):
     context.lobby_page.invite()
 
 
-@then('we accept the invitation')
-def step_impl(context):
-    context.lobby_page.accept_invite()
+@then('we accept the invitation from "{browser}"')
+def step_impl(context, browser):
+    context.lobby_page.accept_invite(context.browsers[browser]['driver'], context.browsers[browser]['wait'])
 
 
 @then('we delete the room')

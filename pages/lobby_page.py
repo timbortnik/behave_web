@@ -145,12 +145,12 @@ class LobbyPage(Page):
     def invite(self):
         self.find_invite().click()
 
-    def open_created_room(self):
-        self.context.driver.get(self.context.base_url + "/chat/room/" + room_url)
-        self.context.wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
+    def open_created_room(self, driver, wait):
+        driver.get(self.context.base_url + "/chat/room/" + room_url)
+        wait.until(lambda driver: driver.find_element_by_id('status_dropdown'))
 
-    def accept_invite(self):
-        self.open_created_room()
+    def accept_invite(self, driver, wait):
+        self.open_created_room(driver, wait)
         self.context.driver.find_element_by_id('hc-message-input').send_keys('@all', Keys.RETURN, Keys.RETURN)
         self.context.driver.find_element_by_id('hc-message-input').send_keys('@HipChat', Keys.ENTER, Keys.ENTER)
         self.context.driver.find_element_by_id('hc-message-input').send_keys('@here', Keys.ENTER, Keys.ENTER)
