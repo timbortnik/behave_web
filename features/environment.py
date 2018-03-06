@@ -31,6 +31,10 @@ import datetime
 import time
 from pages.emoticons_page import EmoticonsPage
 from pages.chat_page import ChatPage
+from helpers.api_requests import ApiRequest
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 
 def get_date_time():
     dt_format = '%Y%m%d_%H%M%S'
@@ -65,7 +69,26 @@ def before_all(context):                        # TODO add 2nd driver
                                         'login': context.hipchat_login_2,
                                         'pass': context.hipchat_pass_2,
                                         'wait': context.wait_2}}
+    context.api = ApiRequest
 
+
+def before_scenario(context, scenario):
+    if 'delete_room' in scenario.tags:
+        context.login_page.navigate()
+        context.login_page.enter_login(context.hipchat_login)
+        context.login_page.login()
+        context.login_page.enter_pass(context.hipchat_pass)
+        context.settings_page.navigate()
+        context.settings_page.api_access()
+        # context.login_page.enter_pass(context.hipchat_pass)
+        # context.settings_page.api_submit()
+        context.api_page.create_token_by_scopes("Manage Rooms")
+        context.token = context.api_page.token("Manage Rooms")
+        context.driver.save_screenshot('scenario_result/' + "tokenparty" + "_failed.png")
+        print(context.token)
+        context.lobby_page.open_created_room()
+        context.room_number = context.driver.current_url.split("/")[(len(context.driver.current_url.split("/"))) - 1]
+        print(context.room_number)
 
 def after_scenario(context, scenario):
     if scenario.status == "failed":
@@ -73,6 +96,11 @@ def after_scenario(context, scenario):
         file = open('scenario_result/' + scenario.name + get_date_time() + '.html', 'w')
         file.write(context.driver.page_source)
         file.close()
+
+    if 'delete_room' in scenario.tags:
+        token = context.token
+        room_url = context.room_number
+        context.api.delete_room(self=context.api, room=room_url, token=token)
 
 
 def after_all(context):

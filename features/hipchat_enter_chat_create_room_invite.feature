@@ -22,7 +22,7 @@ Scenario: Relogin and accept the invitation
     Given we are on Hipchat Lobby Page
     Then we accept the invitation
 
-
+@delete_room
 Scenario: Relogin to 1st acc and delete room
     Given we are on Hipchat Login Page
     When we enter login
