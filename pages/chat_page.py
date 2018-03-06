@@ -37,6 +37,7 @@ class ChatPage(Page):
 
     def check_attach_by_name(self):
         print(self.unique_name)
-        for i in self.context.driver.find_elements_by_css_selector('div.hc-chat-msg'):
+        #for i in self.context.driver.find_elements_by_css_selector('div.hc-chat-msg'):
+        for i in self.context.driver.find_elements_by_css_selector('div.msg-status.msg-confirmed.hc-msg-file'):
             if i.find_element_by_css_selector('span.description').text == self.unique_name:
                 return i.find_element_by_css_selector('div.file-meta').text
