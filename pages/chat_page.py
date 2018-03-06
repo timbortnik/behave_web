@@ -29,14 +29,13 @@ class ChatPage(Page):
 
     def upload_attach(self):
         img_path = os.getcwd() + '/swap/Selenium.txt'
-        attach = self.context.driver.find_element_by_id("fileInput")
-        attach.send_keys(img_path)
+        self.context.driver.find_element_by_id("fileInput").send_keys(img_path)
         self.context.driver.find_element_by_id("hc-message-input").send_keys(self.unique_name, Keys.ENTER)
         xpath_uname = "//span[@class='description'][text()='" + self.unique_name + "']"
         self.context.wait.until(lambda driver: driver.find_element_by_xpath(xpath_uname))
 
     def check_attach_by_name(self):
-        print(self.unique_name)
+        #print(self.unique_name)
         #for i in self.context.driver.find_elements_by_css_selector('div.hc-chat-msg'):
         for i in self.context.driver.find_elements_by_css_selector('div.msg-status.msg-confirmed.hc-msg-file'):
             if i.find_element_by_css_selector('span.description').text == self.unique_name:
